@@ -95,7 +95,7 @@ namespace EUV.Views
             }
 
             draw_marker = false;
-            
+
             marker_num = int.Parse(numTest.Text);
             Console.WriteLine("선택 드론 갯수: " + marker_num.ToString());
             //선택 드론 갯수
@@ -120,7 +120,7 @@ namespace EUV.Views
             markerCount = 0;
             maxMarkerCount = 0;
             enableMarkerCreation = false;
-    }
+        }
 
         #region 폼 로드시 처리하기 - Form_Load(sender, e)
 
@@ -152,6 +152,37 @@ namespace EUV.Views
             RouteMap.Overlays.Add(markersOverlay);
 
             drawPolygonCheckBox.Checked = false;
+
+            // 그리드 그리기
+            DrawGrid();
+            RouteMap.Refresh();
+
+            //
+            // drawPolygonCheckBox의 초기 상태 확인
+            if (drawPolygonCheckBox.Checked)
+            {
+                polygonSelector.Enabled = true;
+                this.polygonSelector.PolygonSelected += polygonSelector_PolygonSelected;
+            }
+            else
+            {
+                polygonSelector.Enabled = false;
+                this.polygonSelector.PolygonSelected -= polygonSelector_PolygonSelected;
+            }
+
+            // 처음에 시작할 때만 지도 클릭 이벤트를 처리합니다.
+            if (!drawPolygonCheckBox.Checked)
+            {
+                RouteMap.MouseUp -= RouteMap_MouseUp;
+                //btnNodeSelect.Enabled = false;
+                //enableMarkerCreation = false;
+            }
+            else
+            {
+                RouteMap.MouseUp += RouteMap_MouseUp;
+                //btnNodeSelect.Enabled = true;
+                //enableMarkerCreation = true;
+            }
         }
         #endregion
 
@@ -192,73 +223,49 @@ namespace EUV.Views
 
         private void DrawGrid()
         {
-
             double latDelta = 0.0000898318; // 1도당 약 111.32km, 1m당 약 0.00000898318도
             double lngDelta = 0.0001139370; // 1도당 약 111.32km, 1m당 약 0.00001139370도
 
-            /*
-            double latMin = RouteMap.FromLocalToLatLng(0, RouteMap.Height).Lat;
-            double latMax = RouteMap.FromLocalToLatLng(RouteMap.Width, 0).Lat;
-            double lngMin = RouteMap.FromLocalToLatLng(0, 0).Lng;
-            double lngMax = RouteMap.FromLocalToLatLng(RouteMap.Width, RouteMap.Height).Lng;
-            */
+            double latMin = RouteMap.FromLocalToLatLng(-3 * RouteMap.Width, 3 * RouteMap.Height).Lat;
+            double latMax = RouteMap.FromLocalToLatLng(3 * RouteMap.Width, -3 *RouteMap.Height).Lat;
+            double lngMin = RouteMap.FromLocalToLatLng(-3 * RouteMap.Width, -3 * RouteMap.Height).Lng;
+            double lngMax = RouteMap.FromLocalToLatLng(3 * RouteMap.Width, 3 * RouteMap.Height).Lng;
 
-            // 격자가 그려질 영역의 위도와 경도 범위를 계산합니다.
-            double latMin = RouteMapCenterLat - (grid_height * latDelta * 0.5);
-            double latMax = RouteMapCenterLat + (grid_height * latDelta * 0.5);
-            double lngMin = RouteMapCenterLng - (grid_width * lngDelta * 0.5);
-            double lngMax = RouteMapCenterLng + (grid_width * lngDelta * 0.5);
-
-            //Console.WriteLine("latMin: " + latMin + ", latMax: " + latMax + ", lngMin: " + lngMin + ", lngMax: " + lngMax);
-
-            // 격자의 간격을 10m로 설정합니다.
-            //double gridSpacing = 10;
-
-            // 격자의 간격에 맞게 위도와 경도를 반올림합니다.
-            double latRound = Math.Round(latMin / latDelta) * latDelta;
-            double lngRound = Math.Round(lngMin / lngDelta) * lngDelta;
-
-
-            //Console.WriteLine(latMin + ", " + latMax + ", " + lngMin + ", " + lngMax);
-            //Console.WriteLine("가로: " + (lngMax - lngMin) + "세로: " + (latMax - latMin));
-
-            // Create a new polygon for each row and column of the grid
-            for (double lat = latRound; lat <= latMax; lat += latDelta)
+            // 그리드 그리는 조건 추가
+            if (RouteMap.Zoom >= 18)
             {
-                List<PointLatLng> points = new List<PointLatLng>();
+                // Create a new polygon for each row and column of the grid
+                for (double lat = latMin; lat <= latMax; lat += latDelta)
+                {
+                    List<PointLatLng> points = new List<PointLatLng>();
+
+                    for (double lng = lngMin; lng <= lngMax; lng += lngDelta)
+                    {
+                        points.Add(new PointLatLng(lat, lng));
+                    }
+
+                    GMapPolygon rowPolygon = new GMapPolygon(points, "Grid");
+                    rowPolygon.Stroke = new Pen(Color.FromArgb(150, Color.DarkGreen), 2);
+                    rowPolygon.Fill = Brushes.Transparent;
+
+                    gridOverlay.Polygons.Add(rowPolygon);
+                }
 
                 for (double lng = lngMin; lng <= lngMax; lng += lngDelta)
                 {
-                    points.Add(new PointLatLng(lat, lng));
-                    //Console.WriteLine("lat: " + lat + ", lng: " + lng);
+                    List<PointLatLng> points = new List<PointLatLng>();
+
+                    for (double lat = latMin; lat <= latMax; lat += latDelta)
+                    {
+                        points.Add(new PointLatLng(lat, lng));
+                    }
+
+                    GMapPolygon colPolygon = new GMapPolygon(points, "Grid");
+                    colPolygon.Stroke = new Pen(Color.FromArgb(150, Color.DarkGreen), 2);
+                    colPolygon.Fill = Brushes.Transparent;
+
+                    gridOverlay.Polygons.Add(colPolygon);
                 }
-
-                // 가로줄에 대한 GMapPolygon 생성
-                GMapPolygon rowPolygon = new GMapPolygon(points, "Grid");
-                rowPolygon.Stroke = new Pen(Color.FromArgb(150, Color.DarkGreen), 2);
-                rowPolygon.Fill = Brushes.Transparent;
-
-                // 가로줄 추가
-                gridOverlay.Polygons.Add(rowPolygon);
-            }
-
-            for (double lng = lngRound; lng <= lngMax; lng += lngDelta)
-            {
-                List<PointLatLng> points = new List<PointLatLng>();
-
-                for (double lat = latMin; lat <= latMax; lat += latDelta)
-                {
-                    points.Add(new PointLatLng(lat, lng));
-                    //Console.WriteLine("lat: " + lat + ", lng: " + lng);
-                }
-
-                // 가로줄에 대한 GMapPolygon 생성
-                GMapPolygon colPolygon = new GMapPolygon(points, "Grid");
-                colPolygon.Stroke = new Pen(Color.FromArgb(150, Color.DarkGreen), 2);
-                colPolygon.Fill = Brushes.Transparent;
-
-                // 가로줄 추가
-                gridOverlay.Polygons.Add(colPolygon);
             }
         }
 
@@ -287,7 +294,7 @@ namespace EUV.Views
         /// <param name="e">이벤트 인자</param>
         private void drawPolygonCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (drawPolygonCheckBox.Checked == true)
+            if (drawPolygonCheckBox.Checked)
             {
                 polygonSelector.Enabled = true;
                 this.polygonSelector.PolygonSelected += polygonSelector_PolygonSelected;

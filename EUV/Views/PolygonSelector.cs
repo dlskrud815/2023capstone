@@ -111,13 +111,13 @@ namespace EUV.Views
         /// </summary>
         /// <param name="control">컨트롤</param>
         /// <param name="pen">펜</param>
-        public PolygonSelector(Control control, Pen pen)
+        public PolygonSelector(Control control, Pen pen) //
         {
             this.control = control;
             this.pen = pen;
 
             this.control.MouseDown += control_MouseDown;
-          
+
         }
 
         #endregion

@@ -97,10 +97,13 @@ namespace EUV.Views
 
                 List<string> list = new List<string>();
                 List<string[]> split = new List<string[]>();
+
+                /*
                 foreach (var t in ((MainForm)(Owner)).cboRoute.Items)
                 {
                     list.Add(t.ToString());
                 }
+                */
 
                 list.Sort(new StrCmpLogicalComparer());
 

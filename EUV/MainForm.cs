@@ -231,13 +231,13 @@ namespace EUV
                 }
 
                 items.Sort(new StrCmpLogicalComparer());
-                cboRoute.InvokeIfNeeded(() => cboRoute.Items.AddRange(items.ToArray()));
+                //cboRoute.InvokeIfNeeded(() => cboRoute.Items.AddRange(items.ToArray()));
 
                 if (items.Count <= 0)
                 {
-                    cboRoute.Items.Add("-");
+                    //cboRoute.Items.Add("-");
                 }
-                cboRoute.SelectedIndex = 0;
+                //cboRoute.SelectedIndex = 0;
             }
             catch (ConfigurationErrorsException)
             {
@@ -334,7 +334,7 @@ namespace EUV
                 connectionThread = null;
             }
         }
-
+        /*
         private void StartViewRouteThread()
         {
             Thread viewRouteThread = new Thread(() =>
@@ -395,7 +395,9 @@ namespace EUV
             };
             viewRouteThread.Start();
         }
+        */
 
+        /*
         private void StartAllRoutesThread()
         {
             Thread allRoutesThread = new Thread(() =>
@@ -457,6 +459,7 @@ namespace EUV
             };
             allRoutesThread.Start();
         }
+        */
 
         private List<PointLatLng> AddTargetGPS(PointLatLng centerPoint, int heading = 0, int mode = -1)
         {
@@ -465,10 +468,11 @@ namespace EUV
                 Route route;
                 if (mode != -1)
                     route = routes[mode];
-                else
-                    route = routes[cboRoute.SelectedIndex];
+                //else
+                //    route = routes[cboRoute.SelectedIndex];
 
                 var targetGPS = new List<PointLatLng>();
+                /*
                 foreach (var point in route.Points)
                 {
                     PointLatLng p = getLocationMetres(centerPoint, point.Y / 100.0, point.X / 100.0, heading);
@@ -476,7 +480,7 @@ namespace EUV
                     targetGPS.Add(p);
                     //Console.WriteLine(string.Format("X : {0}, Z : {1}", point.X, point.Y));
                 }
-
+                */
                 return targetGPS;
             }
             catch { return null; }
@@ -496,6 +500,7 @@ namespace EUV
             return new PointLatLng(newLat, newLng);
         }
 
+        /*
         private void StartUploadRouteThread()
         {
             Thread uploadRouteThread = new Thread(() =>
@@ -606,6 +611,7 @@ namespace EUV
         }
        
         #endregion < to - thread >
+        */
 
         Dictionary<int,ListViewItem> list = new Dictionary<int, ListViewItem>();
         #region < from - listView >
@@ -1399,7 +1405,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1432,7 +1438,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1541,7 +1547,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1630,7 +1636,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1663,7 +1669,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1696,7 +1702,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1725,7 +1731,7 @@ namespace EUV
                 if (result == -1)
                 {
                     listView.Items.Remove(row);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1758,7 +1764,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1797,7 +1803,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1831,7 +1837,7 @@ namespace EUV
                     listView.Items.Remove(row);
                     this.parameters.Remove(parameter);
                     list.Remove(parameter.ID);
-                    cboRoute.Items.Remove(row);
+                    //cboRoute.Items.Remove(row);
                     removeVehicle(cmdMessage.id);
                 }
             }
@@ -1893,12 +1899,15 @@ namespace EUV
         }
         #endregion < to - RPi 제어 >
 
+        /*
         #region < from - 경로 >
         private void btnAddRoute_Click(object sender, EventArgs e)
         {
             StartUploadRouteThread();
         }
+        */
 
+        /*
         private void btnDeleteRoute_Click(object sender, EventArgs e)
         {
             if (cboRoute.Text == "" || cboRoute.Text == "-")
@@ -1914,17 +1923,23 @@ namespace EUV
             }
             cboRoute.SelectedIndex = 0;
         }
+        */
 
+        /*
         private void btnRoute_Click(object sender, EventArgs e)
         {
             StartViewRouteThread();
         }
+        */
 
+        /*
         private void btnAllRoutes_Click(object sender, EventArgs e)
         {
             StartAllRoutesThread();
         }
+        */
 
+        /*
         private void btnDeleteAll_Click(object sender, EventArgs e)
         {
             AllRoutesOverlay.Routes.Clear();
@@ -1945,7 +1960,9 @@ namespace EUV
             cboRoute.Items.Add("-");
             cboRoute.SelectedIndex = 0;
         }
+        */
 
+        /*
         private void cboRoute_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ViewRoute.Find(x => x.Name == string.Format("route{0}", cboRoute.SelectedIndex)) != null)
@@ -1958,7 +1975,9 @@ namespace EUV
             }
         }
         #endregion < to - 경로 >
+        */
 
+        /*
         #region < from - 오디오 >
         private void btnAudioSet_Click(object sender, EventArgs e)
         {
@@ -1978,7 +1997,9 @@ namespace EUV
                 //SaveMusicConfiguration(ofd.FileName);
             }
         }
+        */
 
+        /*
         private void btnAudioOn_Click(object sender, EventArgs e)
         {
             mMediaPlayer.Stop();
@@ -2011,8 +2032,9 @@ namespace EUV
                     removeVehicle(cmdMessage.id);
                 }
             }*/
-        }
-
+        //}
+        
+        /*
         private void btnAudioOff_Click(object sender, EventArgs e)
         {
             mMediaPlayer.Stop();
@@ -2045,9 +2067,9 @@ namespace EUV
                     removeVehicle(cmdMessage.id);
                 }
             }*/
-        }
-        #endregion < to - 오디오 >
-
+        //}
+        //#endregion < to - 오디오 >
+        
         #region < from - tmr >
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -2064,6 +2086,7 @@ namespace EUV
                 MessageBox.Show("저장 위치 태그 없음.", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
         }
 
+        /*
         private void cboRoute_TextChanged(object sender, EventArgs e)
         {
             if(cboRoute.Text=="-")
@@ -2084,6 +2107,7 @@ namespace EUV
                 }
             }
         }
+        */
 
         #region < from - 위치 태그 >
         private void LocationTagSaveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2174,8 +2198,9 @@ namespace EUV
             }
             catch { }
         }
-        #endregion < to - 위치 태그 >
 
+        #endregion < to - 위치 태그 >
 
     }
 }
+#endregion

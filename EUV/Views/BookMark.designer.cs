@@ -63,10 +63,11 @@
             this.panel.Controls.Add(this.lblLat);
             this.panel.Controls.Add(this.listView);
             this.panel.Depth = 0;
-            this.panel.Location = new System.Drawing.Point(2, 67);
+            this.panel.Location = new System.Drawing.Point(3, 100);
+            this.panel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel.MouseState = MaterialSkin.MouseState.HOVER;
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(326, 435);
+            this.panel.Size = new System.Drawing.Size(489, 652);
             this.panel.TabIndex = 3;
             // 
             // materialPanel1
@@ -76,24 +77,25 @@
             this.materialPanel1.Controls.Add(this.btnLocationTag);
             this.materialPanel1.Controls.Add(this.btnMapLocation);
             this.materialPanel1.Depth = 0;
-            this.materialPanel1.Location = new System.Drawing.Point(16, 400);
+            this.materialPanel1.Location = new System.Drawing.Point(24, 600);
+            this.materialPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.materialPanel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialPanel1.Name = "materialPanel1";
-            this.materialPanel1.Size = new System.Drawing.Size(291, 27);
+            this.materialPanel1.Size = new System.Drawing.Size(436, 40);
             this.materialPanel1.TabIndex = 15;
             // 
             // btnLocationTag
             // 
             this.btnLocationTag.Depth = 0;
             this.btnLocationTag.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnLocationTag.Font = new System.Drawing.Font("나눔손글씨 아줌마 자유", 14.25F, System.Drawing.FontStyle.Underline);
+            this.btnLocationTag.Font = new System.Drawing.Font("나눔스퀘어", 12F);
             this.btnLocationTag.Icon = null;
-            this.btnLocationTag.Location = new System.Drawing.Point(156, 0);
-            this.btnLocationTag.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnLocationTag.Location = new System.Drawing.Point(234, 0);
+            this.btnLocationTag.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.btnLocationTag.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLocationTag.Name = "btnLocationTag";
             this.btnLocationTag.Primary = false;
-            this.btnLocationTag.Size = new System.Drawing.Size(135, 27);
+            this.btnLocationTag.Size = new System.Drawing.Size(202, 40);
             this.btnLocationTag.TabIndex = 13;
             this.btnLocationTag.Text = "위치 태그로";
             this.btnLocationTag.UseVisualStyleBackColor = true;
@@ -103,14 +105,14 @@
             // 
             this.btnMapLocation.Depth = 0;
             this.btnMapLocation.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnMapLocation.Font = new System.Drawing.Font("나눔손글씨 아줌마 자유", 14.25F, System.Drawing.FontStyle.Underline);
+            this.btnMapLocation.Font = new System.Drawing.Font("나눔스퀘어", 12F);
             this.btnMapLocation.Icon = null;
             this.btnMapLocation.Location = new System.Drawing.Point(0, 0);
-            this.btnMapLocation.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnMapLocation.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.btnMapLocation.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnMapLocation.Name = "btnMapLocation";
             this.btnMapLocation.Primary = false;
-            this.btnMapLocation.Size = new System.Drawing.Size(135, 27);
+            this.btnMapLocation.Size = new System.Drawing.Size(202, 40);
             this.btnMapLocation.TabIndex = 8;
             this.btnMapLocation.Text = "지도의 현재 위치로";
             this.btnMapLocation.UseVisualStyleBackColor = true;
@@ -119,13 +121,14 @@
             // btnAdd
             // 
             this.btnAdd.Depth = 0;
-            this.btnAdd.Font = new System.Drawing.Font("마루 부리OTF 중간", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnAdd.Icon = null;
-            this.btnAdd.Location = new System.Drawing.Point(16, 480);
+            this.btnAdd.Location = new System.Drawing.Point(24, 720);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Primary = true;
-            this.btnAdd.Size = new System.Drawing.Size(374, 28);
+            this.btnAdd.Size = new System.Drawing.Size(561, 42);
             this.btnAdd.TabIndex = 9;
             this.btnAdd.Text = "등록";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -136,9 +139,10 @@
             this.txtBookMarkName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBookMarkName.Depth = 0;
-            this.txtBookMarkName.Font = new System.Drawing.Font("마루 부리OTF 중간", 14F);
+            this.txtBookMarkName.Font = new System.Drawing.Font("나눔스퀘어", 12F);
             this.txtBookMarkName.Hint = "";
-            this.txtBookMarkName.Location = new System.Drawing.Point(17, 252);
+            this.txtBookMarkName.Location = new System.Drawing.Point(26, 378);
+            this.txtBookMarkName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtBookMarkName.MaxLength = 32767;
             this.txtBookMarkName.MouseState = MaterialSkin.MouseState.HOVER;
             this.txtBookMarkName.Name = "txtBookMarkName";
@@ -147,7 +151,7 @@
             this.txtBookMarkName.SelectedText = "";
             this.txtBookMarkName.SelectionLength = 0;
             this.txtBookMarkName.SelectionStart = 0;
-            this.txtBookMarkName.Size = new System.Drawing.Size(290, 31);
+            this.txtBookMarkName.Size = new System.Drawing.Size(435, 37);
             this.txtBookMarkName.TabIndex = 8;
             this.txtBookMarkName.TabStop = false;
             this.txtBookMarkName.Text = "즐겨찾기 이름";
@@ -159,12 +163,12 @@
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDelete.Depth = 0;
             this.btnDelete.Icon = ((System.Drawing.Image)(resources.GetObject("btnDelete.Icon")));
-            this.btnDelete.Location = new System.Drawing.Point(252, 212);
-            this.btnDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnDelete.Location = new System.Drawing.Point(378, 318);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.btnDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Primary = true;
-            this.btnDelete.Size = new System.Drawing.Size(30, 30);
+            this.btnDelete.Size = new System.Drawing.Size(45, 45);
             this.btnDelete.TabIndex = 7;
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
@@ -174,12 +178,12 @@
             this.btnAddUI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddUI.Depth = 0;
             this.btnAddUI.Icon = ((System.Drawing.Image)(resources.GetObject("btnAddUI.Icon")));
-            this.btnAddUI.Location = new System.Drawing.Point(289, 212);
-            this.btnAddUI.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnAddUI.Location = new System.Drawing.Point(434, 318);
+            this.btnAddUI.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.btnAddUI.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAddUI.Name = "btnAddUI";
             this.btnAddUI.Primary = true;
-            this.btnAddUI.Size = new System.Drawing.Size(30, 30);
+            this.btnAddUI.Size = new System.Drawing.Size(45, 45);
             this.btnAddUI.TabIndex = 6;
             this.btnAddUI.UseVisualStyleBackColor = true;
             this.btnAddUI.Click += new System.EventHandler(this.btnAddUI_Click);
@@ -189,9 +193,10 @@
             this.txtLng.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLng.Depth = 0;
-            this.txtLng.Font = new System.Drawing.Font("Montserrat", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLng.Font = new System.Drawing.Font("나눔스퀘어", 12F);
             this.txtLng.Hint = "";
-            this.txtLng.Location = new System.Drawing.Point(91, 359);
+            this.txtLng.Location = new System.Drawing.Point(136, 538);
+            this.txtLng.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtLng.MaxLength = 32767;
             this.txtLng.MouseState = MaterialSkin.MouseState.HOVER;
             this.txtLng.Name = "txtLng";
@@ -200,7 +205,7 @@
             this.txtLng.SelectedText = "";
             this.txtLng.SelectionLength = 0;
             this.txtLng.SelectionStart = 0;
-            this.txtLng.Size = new System.Drawing.Size(216, 29);
+            this.txtLng.Size = new System.Drawing.Size(324, 38);
             this.txtLng.TabIndex = 5;
             this.txtLng.TabStop = false;
             this.txtLng.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -213,9 +218,10 @@
             this.txtLat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLat.Depth = 0;
-            this.txtLat.Font = new System.Drawing.Font("Montserrat", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLat.Font = new System.Drawing.Font("나눔스퀘어", 12F);
             this.txtLat.Hint = "";
-            this.txtLat.Location = new System.Drawing.Point(91, 311);
+            this.txtLat.Location = new System.Drawing.Point(136, 466);
+            this.txtLat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtLat.MaxLength = 32767;
             this.txtLat.MouseState = MaterialSkin.MouseState.HOVER;
             this.txtLat.Name = "txtLat";
@@ -224,7 +230,7 @@
             this.txtLat.SelectedText = "";
             this.txtLat.SelectionLength = 0;
             this.txtLat.SelectionStart = 0;
-            this.txtLat.Size = new System.Drawing.Size(216, 29);
+            this.txtLat.Size = new System.Drawing.Size(324, 38);
             this.txtLat.TabIndex = 4;
             this.txtLat.TabStop = false;
             this.txtLat.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -236,11 +242,12 @@
             // 
             this.lblLng.AutoSize = true;
             this.lblLng.Depth = 0;
-            this.lblLng.Font = new System.Drawing.Font("마루 부리OTF 중간", 14F);
-            this.lblLng.Location = new System.Drawing.Point(13, 364);
+            this.lblLng.Font = new System.Drawing.Font("나눔스퀘어", 12F);
+            this.lblLng.Location = new System.Drawing.Point(20, 546);
+            this.lblLng.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLng.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblLng.Name = "lblLng";
-            this.lblLng.Size = new System.Drawing.Size(58, 26);
+            this.lblLng.Size = new System.Drawing.Size(69, 26);
             this.lblLng.TabIndex = 3;
             this.lblLng.Text = "경도 :";
             // 
@@ -248,11 +255,12 @@
             // 
             this.lblLat.AutoSize = true;
             this.lblLat.Depth = 0;
-            this.lblLat.Font = new System.Drawing.Font("마루 부리OTF 중간", 14F);
-            this.lblLat.Location = new System.Drawing.Point(13, 316);
+            this.lblLat.Font = new System.Drawing.Font("나눔스퀘어", 12F);
+            this.lblLat.Location = new System.Drawing.Point(20, 474);
+            this.lblLat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLat.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblLat.Name = "lblLat";
-            this.lblLat.Size = new System.Drawing.Size(58, 26);
+            this.lblLat.Size = new System.Drawing.Size(69, 26);
             this.lblLat.TabIndex = 2;
             this.lblLat.Text = "위도 :";
             // 
@@ -263,12 +271,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-            this.listView.Font = new System.Drawing.Font("마루 부리OTF 중간", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.listView.Font = new System.Drawing.Font("나눔스퀘어", 12F);
             this.listView.FullRowSelect = true;
             this.listView.HideSelection = false;
-            this.listView.Location = new System.Drawing.Point(3, 3);
+            this.listView.Location = new System.Drawing.Point(4, 4);
+            this.listView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(320, 203);
+            this.listView.Size = new System.Drawing.Size(478, 302);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
@@ -282,15 +291,16 @@
             // 
             // BookMark
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(330, 503);
+            this.ClientSize = new System.Drawing.Size(495, 754);
             this.Controls.Add(this.panel);
-            this.Font = new System.Drawing.Font("마루 부리OTF 중간", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("나눔스퀘어", 15F);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(2200, 700);
+            this.MaximumSize = new System.Drawing.Size(3300, 1050);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(0, 342);
+            this.MinimumSize = new System.Drawing.Size(0, 513);
             this.Name = "BookMark";
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

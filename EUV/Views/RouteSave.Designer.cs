@@ -46,7 +46,7 @@
             this.txtRouteSaveName.Depth = 0;
             this.txtRouteSaveName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.txtRouteSaveName.Hint = "";
-            this.txtRouteSaveName.Location = new System.Drawing.Point(30, 546);
+            this.txtRouteSaveName.Location = new System.Drawing.Point(27, 487);
             this.txtRouteSaveName.Margin = new System.Windows.Forms.Padding(4);
             this.txtRouteSaveName.MaxLength = 32767;
             this.txtRouteSaveName.MouseState = MaterialSkin.MouseState.HOVER;
@@ -56,7 +56,7 @@
             this.txtRouteSaveName.SelectedText = "";
             this.txtRouteSaveName.SelectionLength = 0;
             this.txtRouteSaveName.SelectionStart = 0;
-            this.txtRouteSaveName.Size = new System.Drawing.Size(435, 37);
+            this.txtRouteSaveName.Size = new System.Drawing.Size(389, 37);
             this.txtRouteSaveName.TabIndex = 10;
             this.txtRouteSaveName.TabStop = false;
             this.txtRouteSaveName.Text = "- 저장 경로명 - ";
@@ -68,12 +68,12 @@
             this.btnRouteDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRouteDelete.Depth = 0;
             this.btnRouteDelete.Icon = ((System.Drawing.Image)(resources.GetObject("btnRouteDelete.Icon")));
-            this.btnRouteDelete.Location = new System.Drawing.Point(384, 487);
-            this.btnRouteDelete.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.btnRouteDelete.Location = new System.Drawing.Point(344, 434);
+            this.btnRouteDelete.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnRouteDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRouteDelete.Name = "btnRouteDelete";
             this.btnRouteDelete.Primary = true;
-            this.btnRouteDelete.Size = new System.Drawing.Size(45, 45);
+            this.btnRouteDelete.Size = new System.Drawing.Size(40, 40);
             this.btnRouteDelete.TabIndex = 12;
             this.btnRouteDelete.UseVisualStyleBackColor = true;
             this.btnRouteDelete.Click += new System.EventHandler(this.btnRouteDelete_Click);
@@ -83,12 +83,12 @@
             this.btnRouteAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRouteAdd.Depth = 0;
             this.btnRouteAdd.Icon = ((System.Drawing.Image)(resources.GetObject("btnRouteAdd.Icon")));
-            this.btnRouteAdd.Location = new System.Drawing.Point(440, 487);
-            this.btnRouteAdd.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.btnRouteAdd.Location = new System.Drawing.Point(394, 434);
+            this.btnRouteAdd.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnRouteAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRouteAdd.Name = "btnRouteAdd";
             this.btnRouteAdd.Primary = true;
-            this.btnRouteAdd.Size = new System.Drawing.Size(45, 45);
+            this.btnRouteAdd.Size = new System.Drawing.Size(40, 40);
             this.btnRouteAdd.TabIndex = 11;
             this.btnRouteAdd.UseVisualStyleBackColor = true;
             this.btnRouteAdd.Click += new System.EventHandler(this.btnRouteAdd_Click);
@@ -103,10 +103,10 @@
             this.listView2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listView2.FullRowSelect = true;
             this.listView2.HideSelection = false;
-            this.listView2.Location = new System.Drawing.Point(8, 161);
+            this.listView2.Location = new System.Drawing.Point(7, 144);
             this.listView2.Margin = new System.Windows.Forms.Padding(4);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(478, 302);
+            this.listView2.Size = new System.Drawing.Size(428, 270);
             this.listView2.TabIndex = 13;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -121,12 +121,12 @@
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDown.Depth = 0;
             this.btnDown.Icon = ((System.Drawing.Image)(resources.GetObject("btnDown.Icon")));
-            this.btnDown.Location = new System.Drawing.Point(18, 487);
-            this.btnDown.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.btnDown.Location = new System.Drawing.Point(16, 434);
+            this.btnDown.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnDown.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnDown.Name = "btnDown";
             this.btnDown.Primary = true;
-            this.btnDown.Size = new System.Drawing.Size(45, 45);
+            this.btnDown.Size = new System.Drawing.Size(40, 40);
             this.btnDown.TabIndex = 15;
             this.btnDown.UseVisualStyleBackColor = true;
             this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
@@ -136,12 +136,12 @@
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUp.Depth = 0;
             this.btnUp.Icon = ((System.Drawing.Image)(resources.GetObject("btnUp.Icon")));
-            this.btnUp.Location = new System.Drawing.Point(74, 487);
-            this.btnUp.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.btnUp.Location = new System.Drawing.Point(66, 434);
+            this.btnUp.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnUp.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnUp.Name = "btnUp";
             this.btnUp.Primary = true;
-            this.btnUp.Size = new System.Drawing.Size(45, 45);
+            this.btnUp.Size = new System.Drawing.Size(40, 40);
             this.btnUp.TabIndex = 14;
             this.btnUp.UseVisualStyleBackColor = true;
             // 
@@ -150,12 +150,12 @@
             this.btnRouteSet.Depth = 0;
             this.btnRouteSet.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
             this.btnRouteSet.Icon = null;
-            this.btnRouteSet.Location = new System.Drawing.Point(115, 629);
+            this.btnRouteSet.Location = new System.Drawing.Point(103, 561);
             this.btnRouteSet.Margin = new System.Windows.Forms.Padding(2);
             this.btnRouteSet.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRouteSet.Name = "btnRouteSet";
             this.btnRouteSet.Primary = true;
-            this.btnRouteSet.Size = new System.Drawing.Size(292, 47);
+            this.btnRouteSet.Size = new System.Drawing.Size(261, 42);
             this.btnRouteSet.TabIndex = 16;
             this.btnRouteSet.Text = "경로 저장";
             this.btnRouteSet.UseVisualStyleBackColor = true;
@@ -163,9 +163,9 @@
             // 
             // RouteSave
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 33F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(495, 754);
+            this.ClientSize = new System.Drawing.Size(443, 672);
             this.Controls.Add(this.btnRouteSet);
             this.Controls.Add(this.btnDown);
             this.Controls.Add(this.btnUp);
@@ -173,8 +173,8 @@
             this.Controls.Add(this.btnRouteDelete);
             this.Controls.Add(this.btnRouteAdd);
             this.Controls.Add(this.txtRouteSaveName);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
-            this.Margin = new System.Windows.Forms.Padding(6);
+            this.Font = new System.Drawing.Font("나눔스퀘어", 15F);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.Name = "RouteSave";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "경로 저장";
