@@ -381,7 +381,7 @@ namespace EUV.Views
                 PointLatLng point = RouteMap.FromLocalToLatLng(e.X, e.Y);
 
                 ContextMenu menu = new ContextMenu();
-                MenuItem deleteItem = new MenuItem("Delete Marker");
+                MenuItem deleteItem = new MenuItem("선택 마커 삭제");
                 deleteItem.Click += new EventHandler(deleteItem_Click);
                 menu.MenuItems.Add(deleteItem);
 
@@ -409,7 +409,7 @@ namespace EUV.Views
                     }
 
                     RouteMap.Update();
-                    markerCount = markerCount - 2;
+                    markerCount = markersOverlay.Markers.Count;
 
                     RouteMap.MouseUp += RouteMap_MouseUp;
                     btnNodeSelect.Enabled = true;

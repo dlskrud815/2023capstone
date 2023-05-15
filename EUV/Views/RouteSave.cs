@@ -26,7 +26,7 @@ namespace EUV.Views
 
         private void RouteSave_Load(object sender, EventArgs e)
         {
-
+            LoadConfiguration();
         }
 
         public void SetMarkerLocations(List<PointLatLng> locations)
@@ -62,9 +62,10 @@ namespace EUV.Views
             using (StreamReader reader = new StreamReader(fileName))
             {
                 string line;
+                int index = 1; // 인덱스 변수 추가
 
                 // 리스트뷰에 항목 추가
-                ListViewItem item = new ListViewItem(fileName);
+                //ListViewItem item = new ListViewItem(fileName);
 
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -72,10 +73,15 @@ namespace EUV.Views
                     double lat = double.Parse(fields[0]);
                     double lng = double.Parse(fields[1]);
 
-                    item.SubItems.Add(lat.ToString());
-                    item.SubItems.Add(lng.ToString());
+                    ListViewItem item = new ListViewItem(fileName); // 인덱스 추가
+                    item.SubItems.Add(index.ToString()); // 파일명은 세 번째 칼럼에 표시
+                    Console.WriteLine(index.ToString() + "인덱스");
+                    //item.SubItems.Add(lat.ToString());
+                    //item.SubItems.Add(lng.ToString());
+                    listView2.Items.Add(item);
+
+                    index++; // 인덱스 증가
                 }
-                listView2.Items.Add(item);
             }
 
             MessageBox.Show("저장 및 로드가 완료되었습니다.");
@@ -83,7 +89,7 @@ namespace EUV.Views
 
         private void btnRouteAdd_Click(object sender, EventArgs e)
         {
-            if (txtRouteSaveName.Text != "" && txtRouteSaveName.Text != "- 저장 경로명 - ")
+            if (txtRouteSaveName.Text != "" && txtRouteSaveName.Text != "- 경로 추가 -")
             {
                 SaveConfiguration(string.Format("경로명-{0}", txtRouteSaveName.Text));
                 BeginInvoke((Action)delegate
