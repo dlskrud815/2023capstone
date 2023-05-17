@@ -8,17 +8,23 @@ using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EUV.Views
 {
     public partial class RouteDraw : MaterialForm
     {
+        public List<List<PointLatLng>> markersList = new List<List<PointLatLng>>();
+
         Theme theme;    // 테마
 
         RouteSave routeSave;
@@ -64,6 +70,9 @@ namespace EUV.Views
         {
             InitializeComponent();
             RouteMapInitializing();
+            //LoadConfiguration();
+
+            cboRoute.SelectedIndexChanged += cboRoute_SelectedIndexChanged;
 
             // Register the OnMapZoomChanged event handler
             RouteMap.OnMapZoomChanged += RouteMap_OnMapZoomChanged;
@@ -131,6 +140,8 @@ namespace EUV.Views
         /// <param name="e">이벤트 인자</param>
         private void RouteDraw_Load(object sender, EventArgs e)
         {
+            LoadConfiguration();
+
             theme = new Theme(this, Container);
             theme.ThemeMode = ((MainForm)(Owner)).theme.ThemeMode;
             Point = ((MainForm)(Owner)).point;
@@ -227,7 +238,7 @@ namespace EUV.Views
             double lngDelta = 0.0001139370; // 1도당 약 111.32km, 1m당 약 0.00001139370도
 
             double latMin = RouteMap.FromLocalToLatLng(-3 * RouteMap.Width, 3 * RouteMap.Height).Lat;
-            double latMax = RouteMap.FromLocalToLatLng(3 * RouteMap.Width, -3 *RouteMap.Height).Lat;
+            double latMax = RouteMap.FromLocalToLatLng(3 * RouteMap.Width, -3 * RouteMap.Height).Lat;
             double lngMin = RouteMap.FromLocalToLatLng(-3 * RouteMap.Width, -3 * RouteMap.Height).Lng;
             double lngMax = RouteMap.FromLocalToLatLng(3 * RouteMap.Width, 3 * RouteMap.Height).Lng;
 
@@ -381,7 +392,7 @@ namespace EUV.Views
                 PointLatLng point = RouteMap.FromLocalToLatLng(e.X, e.Y);
 
                 ContextMenu menu = new ContextMenu();
-                MenuItem deleteItem = new MenuItem("선택 마커 삭제");
+                MenuItem deleteItem = new MenuItem("Delete Marker");
                 deleteItem.Click += new EventHandler(deleteItem_Click);
                 menu.MenuItems.Add(deleteItem);
 
@@ -409,7 +420,7 @@ namespace EUV.Views
                     }
 
                     RouteMap.Update();
-                    markerCount = markersOverlay.Markers.Count;
+                    markerCount = markerCount - 2;
 
                     RouteMap.MouseUp += RouteMap_MouseUp;
                     btnNodeSelect.Enabled = true;
@@ -507,6 +518,129 @@ namespace EUV.Views
 
             routeSave.SetMarkerLocations(markerLocations);
             routeSave.Show();
+        }
+
+        private void btnPath_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void LoadConfiguration()
+        {
+            try
+            {
+                var appSettings = ConfigurationManager.AppSettings;
+
+                if (cboRoute.InvokeRequired)
+                {
+                    cboRoute.Invoke(new Action(() =>
+                    {
+                        foreach (var key in appSettings.AllKeys)
+                        {
+                            if (key.StartsWith("MarkerList-"))
+                            {
+                                string routeName = key.Substring("MarkerList-".Length);
+                                cboRoute.Items.Add(routeName);
+                            }
+                        }
+                    }));
+                }
+                else
+                {
+                    foreach (var key in appSettings.AllKeys)
+                    {
+                        if (key.StartsWith("MarkerList-"))
+                        {
+                            string routeName = key.Substring("MarkerList-".Length);
+                            cboRoute.Items.Add(routeName);
+                        }
+                    }
+                }
+
+            }
+            catch (ConfigurationErrorsException)
+            {
+                Console.WriteLine("Configration error exception occur!");
+            }
+            catch { }
+        }
+
+        private void cboRoute_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedRoute = cboRoute.SelectedItem.ToString(); //선택 경로명
+            Console.WriteLine("콤보박스 내 선택항목: " + selectedRoute);
+
+
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appSettings = configFile.AppSettings.Settings;
+
+            string key2 = "MarkerList-" + selectedRoute; // ex) MarkerList-경로확인1
+            string configValue = ConfigurationManager.AppSettings[key2];
+            string[] locationStrings = configValue.Split(';');
+            List<string> checks = new List<string>(new string[locationStrings.Length]);
+
+            foreach (string locationString in locationStrings)
+            {
+                string[] coordinates = locationString.Split(',');
+
+                string routeName = coordinates[0];
+                string routeIndex = coordinates[1];
+
+                checks[int.Parse(routeIndex)] = routeName;
+            }
+
+            int index1 = 0;
+
+            markersList.Clear();
+            
+            foreach (string check in checks)
+            {
+                string selectedKey = "MarkerLocations-" + check; // 리스트뷰 경로명
+
+                // 설정 파일에서 문자열로 변환된 경로리스트
+                string configValue2 = ConfigurationManager.AppSettings[selectedKey];
+
+                string[] locationStrings2 = configValue2.Split(';');
+
+                List<PointLatLng> tempLocations = new List<PointLatLng>();
+                tempLocations.Clear();
+
+                foreach (string locationString2 in locationStrings2)
+                {
+                    string[] coordinates = locationString2.Split(',');
+                    double latitude = double.Parse(coordinates[0]);
+                    double longitude = double.Parse(coordinates[1]);
+
+                    PointLatLng point = new PointLatLng(latitude, longitude);
+                    // 분할된 문자열로부터 PointLatLng 인스턴스를 생성하여 리스트에 추가합니다.
+
+                    tempLocations.Add(point);
+                }
+
+                markersList.Add(tempLocations);
+
+                Console.WriteLine();
+                Console.WriteLine("경로명: " + check + ", 인덱스:" + index1);
+
+                foreach (var location in tempLocations)
+                {
+                    Console.WriteLine("위도: {0}, 경도: {1}", location.Lat, location.Lng);
+                }
+
+                index1++;
+            }
+
+            /*
+            Console.WriteLine();
+            foreach (var locations in markersList) ** 지훈님쓰 이렇게 markerList에서 일반리스트에 double로 넣든 해서 알고리즘 돌리면 될 듯쓰?
+            {
+                Console.WriteLine();
+                foreach (var location in locations)
+                {
+                    Console.WriteLine("위도: {0}, 경도: {1}", location.Lat, location.Lng);
+                }
+            }
+            */
         }
     }
 }

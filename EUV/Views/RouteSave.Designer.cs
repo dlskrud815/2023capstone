@@ -34,11 +34,11 @@
             this.btnRouteAdd = new MaterialSkin.Controls.MaterialFlatButton();
             this.listView2 = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnDown = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnUp = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnRouteSet = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.materialSingleLineTextField1 = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.txtAllRouteSaveName = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.SuspendLayout();
             // 
             // txtRouteSaveName
@@ -61,7 +61,7 @@
             this.txtRouteSaveName.Size = new System.Drawing.Size(389, 37);
             this.txtRouteSaveName.TabIndex = 10;
             this.txtRouteSaveName.TabStop = false;
-            this.txtRouteSaveName.Text = "- 경로 추가 - ";
+            this.txtRouteSaveName.Text = "- 경로 추가 -";
             this.txtRouteSaveName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtRouteSaveName.UseSystemPasswordChar = false;
             // 
@@ -119,6 +119,11 @@
             this.columnHeader2.Text = "경로 시나리오명";
             this.columnHeader2.Width = 200;
             // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "순서";
+            this.columnHeader1.Width = 100;
+            // 
             // btnDown
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -147,6 +152,7 @@
             this.btnUp.Size = new System.Drawing.Size(40, 40);
             this.btnUp.TabIndex = 14;
             this.btnUp.UseVisualStyleBackColor = true;
+            this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
             // 
             // btnRouteSet
             // 
@@ -164,41 +170,36 @@
             this.btnRouteSet.UseVisualStyleBackColor = true;
             this.btnRouteSet.Click += new System.EventHandler(this.btnRouteSet_Click);
             // 
-            // materialSingleLineTextField1
+            // txtAllRouteSaveName
             // 
-            this.materialSingleLineTextField1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtAllRouteSaveName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialSingleLineTextField1.Depth = 0;
-            this.materialSingleLineTextField1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.materialSingleLineTextField1.Hint = "";
-            this.materialSingleLineTextField1.Location = new System.Drawing.Point(27, 549);
-            this.materialSingleLineTextField1.Margin = new System.Windows.Forms.Padding(4);
-            this.materialSingleLineTextField1.MaxLength = 32767;
-            this.materialSingleLineTextField1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialSingleLineTextField1.Name = "materialSingleLineTextField1";
-            this.materialSingleLineTextField1.PasswordChar = '\0';
-            this.materialSingleLineTextField1.ReadOnly = false;
-            this.materialSingleLineTextField1.SelectedText = "";
-            this.materialSingleLineTextField1.SelectionLength = 0;
-            this.materialSingleLineTextField1.SelectionStart = 0;
-            this.materialSingleLineTextField1.Size = new System.Drawing.Size(389, 37);
-            this.materialSingleLineTextField1.TabIndex = 17;
-            this.materialSingleLineTextField1.TabStop = false;
-            this.materialSingleLineTextField1.Text = "- 저장 경로명 - ";
-            this.materialSingleLineTextField1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.materialSingleLineTextField1.UseSystemPasswordChar = false;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "순서";
-            this.columnHeader1.Width = 100;
+            this.txtAllRouteSaveName.Depth = 0;
+            this.txtAllRouteSaveName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.txtAllRouteSaveName.Hint = "";
+            this.txtAllRouteSaveName.Location = new System.Drawing.Point(27, 549);
+            this.txtAllRouteSaveName.Margin = new System.Windows.Forms.Padding(4);
+            this.txtAllRouteSaveName.MaxLength = 32767;
+            this.txtAllRouteSaveName.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtAllRouteSaveName.Name = "txtAllRouteSaveName";
+            this.txtAllRouteSaveName.PasswordChar = '\0';
+            this.txtAllRouteSaveName.ReadOnly = false;
+            this.txtAllRouteSaveName.SelectedText = "";
+            this.txtAllRouteSaveName.SelectionLength = 0;
+            this.txtAllRouteSaveName.SelectionStart = 0;
+            this.txtAllRouteSaveName.Size = new System.Drawing.Size(389, 37);
+            this.txtAllRouteSaveName.TabIndex = 17;
+            this.txtAllRouteSaveName.TabStop = false;
+            this.txtAllRouteSaveName.Text = "- 저장 경로명 -";
+            this.txtAllRouteSaveName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAllRouteSaveName.UseSystemPasswordChar = false;
             // 
             // RouteSave
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 33F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(443, 672);
-            this.Controls.Add(this.materialSingleLineTextField1);
+            this.Controls.Add(this.txtAllRouteSaveName);
             this.Controls.Add(this.btnRouteSet);
             this.Controls.Add(this.btnDown);
             this.Controls.Add(this.btnUp);
@@ -219,7 +220,7 @@
             this.Controls.SetChildIndex(this.btnUp, 0);
             this.Controls.SetChildIndex(this.btnDown, 0);
             this.Controls.SetChildIndex(this.btnRouteSet, 0);
-            this.Controls.SetChildIndex(this.materialSingleLineTextField1, 0);
+            this.Controls.SetChildIndex(this.txtAllRouteSaveName, 0);
             this.ResumeLayout(false);
 
         }
@@ -234,7 +235,7 @@
         private MaterialSkin.Controls.MaterialFlatButton btnDown;
         private MaterialSkin.Controls.MaterialFlatButton btnUp;
         private MaterialSkin.Controls.MaterialRaisedButton btnRouteSet;
-        private MaterialSkin.Controls.MaterialSingleLineTextField materialSingleLineTextField1;
+        private MaterialSkin.Controls.MaterialSingleLineTextField txtAllRouteSaveName;
         private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }
