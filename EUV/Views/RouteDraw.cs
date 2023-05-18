@@ -516,6 +516,7 @@ namespace EUV.Views
                 Owner = this
             };
 
+            routeSave.SetNumTestValue(numTest.Text);
             routeSave.SetMarkerLocations(markerLocations);
             routeSave.Show();
         }
