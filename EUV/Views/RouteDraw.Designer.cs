@@ -30,14 +30,20 @@
         {
             this.grpSave = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSeeRoute = new MaterialSkin.Controls.MaterialRaisedButton();
             this.drawSaveBtn = new MaterialSkin.Controls.MaterialRaisedButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.droneNum = new System.Windows.Forms.Label();
+            this.btnRemoveDraw = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnDeletePoly = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnSavePoly = new MaterialSkin.Controls.MaterialRaisedButton();
             this.drawPolygonCheckBox = new System.Windows.Forms.CheckBox();
-            this.btnNodeSelect = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.labelDroneNum = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.cboPoly = new System.Windows.Forms.ComboBox();
+            this.btnNodeSelect = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnAutoSelect = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.droneNum = new System.Windows.Forms.Label();
+            this.labelDroneNum = new System.Windows.Forms.Label();
             this.numTest = new System.Windows.Forms.Label();
             this.grpDraw = new System.Windows.Forms.GroupBox();
             this.tlpAudio = new System.Windows.Forms.TableLayoutPanel();
@@ -45,12 +51,6 @@
             this.cboRoute = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.RouteMap = new EUV.Controls.myGMAP();
-            this.btnAutoSelect = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.cboPoly = new System.Windows.Forms.ComboBox();
-            this.btnSavePoly = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.btnDeletePoly = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.btnRemoveDraw = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.btnSeeRoute = new MaterialSkin.Controls.MaterialRaisedButton();
             this.grpSave.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -91,6 +91,22 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(208, 65);
             this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // btnSeeRoute
+            // 
+            this.btnSeeRoute.Depth = 0;
+            this.btnSeeRoute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSeeRoute.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
+            this.btnSeeRoute.Icon = null;
+            this.btnSeeRoute.Location = new System.Drawing.Point(106, 2);
+            this.btnSeeRoute.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSeeRoute.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSeeRoute.Name = "btnSeeRoute";
+            this.btnSeeRoute.Primary = true;
+            this.btnSeeRoute.Size = new System.Drawing.Size(100, 41);
+            this.btnSeeRoute.TabIndex = 10;
+            this.btnSeeRoute.Text = "경로 보기";
+            this.btnSeeRoute.UseVisualStyleBackColor = true;
             // 
             // drawSaveBtn
             // 
@@ -157,17 +173,57 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1220, 65);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // droneNum
+            // btnRemoveDraw
             // 
-            this.droneNum.AutoSize = true;
-            this.droneNum.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.droneNum.Font = new System.Drawing.Font("나눔스퀘어", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.droneNum.Location = new System.Drawing.Point(977, 0);
-            this.droneNum.Name = "droneNum";
-            this.droneNum.Size = new System.Drawing.Size(55, 45);
-            this.droneNum.TabIndex = 21;
-            this.droneNum.Text = "-";
-            this.droneNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnRemoveDraw.AutoSize = true;
+            this.btnRemoveDraw.Depth = 0;
+            this.btnRemoveDraw.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRemoveDraw.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
+            this.btnRemoveDraw.Icon = null;
+            this.btnRemoveDraw.Location = new System.Drawing.Point(708, 2);
+            this.btnRemoveDraw.Margin = new System.Windows.Forms.Padding(2);
+            this.btnRemoveDraw.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnRemoveDraw.Name = "btnRemoveDraw";
+            this.btnRemoveDraw.Primary = true;
+            this.btnRemoveDraw.Size = new System.Drawing.Size(81, 41);
+            this.btnRemoveDraw.TabIndex = 26;
+            this.btnRemoveDraw.Text = "지우기";
+            this.btnRemoveDraw.UseVisualStyleBackColor = true;
+            this.btnRemoveDraw.Click += new System.EventHandler(this.btnRemoveDraw_Click);
+            // 
+            // btnDeletePoly
+            // 
+            this.btnDeletePoly.AutoSize = true;
+            this.btnDeletePoly.Depth = 0;
+            this.btnDeletePoly.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDeletePoly.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
+            this.btnDeletePoly.Icon = null;
+            this.btnDeletePoly.Location = new System.Drawing.Point(586, 2);
+            this.btnDeletePoly.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDeletePoly.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnDeletePoly.Name = "btnDeletePoly";
+            this.btnDeletePoly.Primary = true;
+            this.btnDeletePoly.Size = new System.Drawing.Size(118, 41);
+            this.btnDeletePoly.TabIndex = 25;
+            this.btnDeletePoly.Text = "다각형 삭제";
+            this.btnDeletePoly.UseVisualStyleBackColor = true;
+            // 
+            // btnSavePoly
+            // 
+            this.btnSavePoly.AutoSize = true;
+            this.btnSavePoly.Depth = 0;
+            this.btnSavePoly.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSavePoly.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
+            this.btnSavePoly.Icon = null;
+            this.btnSavePoly.Location = new System.Drawing.Point(464, 2);
+            this.btnSavePoly.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSavePoly.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSavePoly.Name = "btnSavePoly";
+            this.btnSavePoly.Primary = true;
+            this.btnSavePoly.Size = new System.Drawing.Size(118, 41);
+            this.btnSavePoly.TabIndex = 24;
+            this.btnSavePoly.Text = "다각형 저장";
+            this.btnSavePoly.UseVisualStyleBackColor = true;
             // 
             // drawPolygonCheckBox
             // 
@@ -181,6 +237,28 @@
             this.drawPolygonCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.drawPolygonCheckBox.UseVisualStyleBackColor = true;
             this.drawPolygonCheckBox.CheckedChanged += new System.EventHandler(this.drawPolygonCheckBox_CheckedChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = global::EUV.Properties.Resources.경로그리기;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(42, 39);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 19;
+            this.pictureBox1.TabStop = false;
+            // 
+            // cboPoly
+            // 
+            this.cboPoly.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cboPoly.Font = new System.Drawing.Font("나눔스퀘어", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.cboPoly.FormattingEnabled = true;
+            this.cboPoly.Location = new System.Drawing.Point(221, 3);
+            this.cboPoly.Name = "cboPoly";
+            this.cboPoly.Size = new System.Drawing.Size(238, 33);
+            this.cboPoly.TabIndex = 23;
+            this.cboPoly.Text = "- 저장 다각형 -";
             // 
             // btnNodeSelect
             // 
@@ -198,6 +276,33 @@
             this.btnNodeSelect.UseVisualStyleBackColor = true;
             this.btnNodeSelect.Click += new System.EventHandler(this.btnNodeSelect_Click);
             // 
+            // btnAutoSelect
+            // 
+            this.btnAutoSelect.Depth = 0;
+            this.btnAutoSelect.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAutoSelect.Icon = null;
+            this.btnAutoSelect.Location = new System.Drawing.Point(1037, 2);
+            this.btnAutoSelect.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAutoSelect.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnAutoSelect.Name = "btnAutoSelect";
+            this.btnAutoSelect.Primary = true;
+            this.btnAutoSelect.Size = new System.Drawing.Size(87, 41);
+            this.btnAutoSelect.TabIndex = 22;
+            this.btnAutoSelect.Text = "자동 선택";
+            this.btnAutoSelect.UseVisualStyleBackColor = true;
+            // 
+            // droneNum
+            // 
+            this.droneNum.AutoSize = true;
+            this.droneNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.droneNum.Font = new System.Drawing.Font("나눔스퀘어", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.droneNum.Location = new System.Drawing.Point(977, 0);
+            this.droneNum.Name = "droneNum";
+            this.droneNum.Size = new System.Drawing.Size(55, 45);
+            this.droneNum.TabIndex = 21;
+            this.droneNum.Text = "-";
+            this.droneNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // labelDroneNum
             // 
             this.labelDroneNum.AutoSize = true;
@@ -209,17 +314,6 @@
             this.labelDroneNum.TabIndex = 20;
             this.labelDroneNum.Text = "선택 수상드론 개수";
             this.labelDroneNum.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::EUV.Properties.Resources.경로그리기;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(42, 39);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 19;
-            this.pictureBox1.TabStop = false;
             // 
             // numTest
             // 
@@ -349,100 +443,6 @@
             this.RouteMap.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.RouteMap_OnMapZoomChanged);
             this.RouteMap.Paint += new System.Windows.Forms.PaintEventHandler(this.RouteMap_Paint);
             this.RouteMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RouteMap_MouseUp);
-            // 
-            // btnAutoSelect
-            // 
-            this.btnAutoSelect.Depth = 0;
-            this.btnAutoSelect.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAutoSelect.Icon = null;
-            this.btnAutoSelect.Location = new System.Drawing.Point(1037, 2);
-            this.btnAutoSelect.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAutoSelect.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnAutoSelect.Name = "btnAutoSelect";
-            this.btnAutoSelect.Primary = true;
-            this.btnAutoSelect.Size = new System.Drawing.Size(87, 41);
-            this.btnAutoSelect.TabIndex = 22;
-            this.btnAutoSelect.Text = "자동 선택";
-            this.btnAutoSelect.UseVisualStyleBackColor = true;
-            // 
-            // cboPoly
-            // 
-            this.cboPoly.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cboPoly.Font = new System.Drawing.Font("나눔스퀘어", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cboPoly.FormattingEnabled = true;
-            this.cboPoly.Location = new System.Drawing.Point(221, 3);
-            this.cboPoly.Name = "cboPoly";
-            this.cboPoly.Size = new System.Drawing.Size(238, 33);
-            this.cboPoly.TabIndex = 23;
-            this.cboPoly.Text = "- 저장 다각형 -";
-            // 
-            // btnSavePoly
-            // 
-            this.btnSavePoly.AutoSize = true;
-            this.btnSavePoly.Depth = 0;
-            this.btnSavePoly.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSavePoly.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
-            this.btnSavePoly.Icon = null;
-            this.btnSavePoly.Location = new System.Drawing.Point(464, 2);
-            this.btnSavePoly.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSavePoly.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnSavePoly.Name = "btnSavePoly";
-            this.btnSavePoly.Primary = true;
-            this.btnSavePoly.Size = new System.Drawing.Size(118, 41);
-            this.btnSavePoly.TabIndex = 24;
-            this.btnSavePoly.Text = "다각형 저장";
-            this.btnSavePoly.UseVisualStyleBackColor = true;
-            // 
-            // btnDeletePoly
-            // 
-            this.btnDeletePoly.AutoSize = true;
-            this.btnDeletePoly.Depth = 0;
-            this.btnDeletePoly.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDeletePoly.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
-            this.btnDeletePoly.Icon = null;
-            this.btnDeletePoly.Location = new System.Drawing.Point(586, 2);
-            this.btnDeletePoly.Margin = new System.Windows.Forms.Padding(2);
-            this.btnDeletePoly.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnDeletePoly.Name = "btnDeletePoly";
-            this.btnDeletePoly.Primary = true;
-            this.btnDeletePoly.Size = new System.Drawing.Size(118, 41);
-            this.btnDeletePoly.TabIndex = 25;
-            this.btnDeletePoly.Text = "다각형 삭제";
-            this.btnDeletePoly.UseVisualStyleBackColor = true;
-            // 
-            // btnRemoveDraw
-            // 
-            this.btnRemoveDraw.AutoSize = true;
-            this.btnRemoveDraw.Depth = 0;
-            this.btnRemoveDraw.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnRemoveDraw.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
-            this.btnRemoveDraw.Icon = null;
-            this.btnRemoveDraw.Location = new System.Drawing.Point(708, 2);
-            this.btnRemoveDraw.Margin = new System.Windows.Forms.Padding(2);
-            this.btnRemoveDraw.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnRemoveDraw.Name = "btnRemoveDraw";
-            this.btnRemoveDraw.Primary = true;
-            this.btnRemoveDraw.Size = new System.Drawing.Size(81, 41);
-            this.btnRemoveDraw.TabIndex = 26;
-            this.btnRemoveDraw.Text = "지우기";
-            this.btnRemoveDraw.UseVisualStyleBackColor = true;
-            this.btnRemoveDraw.Click += new System.EventHandler(this.btnRemoveDraw_Click);
-            // 
-            // btnSeeRoute
-            // 
-            this.btnSeeRoute.Depth = 0;
-            this.btnSeeRoute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSeeRoute.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
-            this.btnSeeRoute.Icon = null;
-            this.btnSeeRoute.Location = new System.Drawing.Point(106, 2);
-            this.btnSeeRoute.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSeeRoute.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnSeeRoute.Name = "btnSeeRoute";
-            this.btnSeeRoute.Primary = true;
-            this.btnSeeRoute.Size = new System.Drawing.Size(100, 41);
-            this.btnSeeRoute.TabIndex = 10;
-            this.btnSeeRoute.Text = "경로 보기";
-            this.btnSeeRoute.UseVisualStyleBackColor = true;
             // 
             // RouteDraw
             // 

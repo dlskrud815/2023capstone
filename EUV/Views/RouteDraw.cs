@@ -28,6 +28,7 @@ namespace EUV.Views
         Theme theme;    // 테마
 
         RouteSave routeSave;
+        AlgorithmsForm algorithmsForm;
 
         // 스레드
         Thread thread;
@@ -81,10 +82,6 @@ namespace EUV.Views
             gridOverlay = new GMapOverlay("Grid");
             DrawGrid();
             RouteMap.Overlays.Add(gridOverlay);
-
-            //그리기
-            //Load += RouteDraw_Load;
-            //drawPolygonCheckBox.CheckState = CheckState.Unchecked;
 
             drawPolygonCheckBox.Checked = false;
 
@@ -146,16 +143,11 @@ namespace EUV.Views
             theme.ThemeMode = ((MainForm)(Owner)).theme.ThemeMode;
             Point = ((MainForm)(Owner)).point;
 
-            //LoadConfiguration();
-
             RouteMapCenterLat = ((MainForm)(Owner)).MainMap.Position.Lat;
             RouteMapCenterLng = ((MainForm)(Owner)).MainMap.Position.Lng;
 
             RouteMap.Position = new PointLatLng(RouteMapCenterLat, RouteMapCenterLng);
             RouteMap.Zoom = ((MainForm)(Owner)).MainMap.Zoom;
-
-            //drawPolygonCheckBox.Checked = false;
-            //Console.WriteLine(RouteMapCenterLat + "   " + RouteMapCenterLng);
 
 
             // 마커를 표시할 Overlay 생성 및 MainMap에 추가
@@ -196,30 +188,6 @@ namespace EUV.Views
             }
         }
         #endregion
-
-        /*
-        private void RouteMap_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta > 0)
-            {
-                grid_zoom = RouteMap.Zoom;
-                //Console.WriteLine(grid_zoom + "줌인");
-
-                grid_height = RouteMap.Height;
-                grid_width = RouteMap.Width;
-                //Console.WriteLine("height: " + grid_height + "width: " + grid_width);
-            }
-            else if (e.Delta < 0)
-            {
-                grid_zoom = RouteMap.Zoom;
-                //Console.WriteLine(grid_zoom + "줌아웃");
-
-                grid_height = RouteMap.Height;
-                grid_width = RouteMap.Width;
-                //Console.WriteLine("height: " + grid_height + "width: " + grid_width);
-            }
-        }
-        */
 
         private void RouteMap_OnMapZoomChanged()
         {
@@ -363,8 +331,6 @@ namespace EUV.Views
         {
             maxMarkerCount = int.Parse(numTest.Text);
 
-            //RouteMap.CanDragMap = false;
-
             // 지도 클릭 이벤트 등록
             RouteMap.MouseUp -= RouteMap_MouseUp; // 두 번씩 클릭 이벤트 발생하는 거 해결
             RouteMap.MouseUp += RouteMap_MouseUp;
@@ -374,15 +340,6 @@ namespace EUV.Views
 
             // 마커 생성 활성
             enableMarkerCreation = true;
-
-
-            /*
-            eventCheck_routeMap = false;
-
-            this.polygonSelector.PolygonSelected -= polygonSelector_PolygonSelected;
-            this.polygonSelector = new PolygonSelector(this.RouteMap, new Pen(Color.Red, 2), eventCheck_routeMap);
-            this.polygonSelector.PolygonSelected += polygonSelector_PolygonSelected;
-            */
         }
 
         private void RouteMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
@@ -400,46 +357,44 @@ namespace EUV.Views
                 RouteMap.ContextMenu.Show(RouteMap, new Point(e.X, e.Y));
             }
         }
-
         private void deleteItem_Click(object sender, EventArgs e)
         {
             GMapOverlay markersOverlay = RouteMap.Overlays.FirstOrDefault(x => x.Id == "markers");
             if (markersOverlay != null)
             {
-                GMapMarker marker = markersOverlay.Markers.FirstOrDefault(x => x.IsMouseOver);
-                if (marker != null)
+                GMapMarker clickedMarker = markersOverlay.Markers.FirstOrDefault(x => x.IsMouseOver);
+                if (clickedMarker != null)
                 {
-                    // 클릭한 마커와 같은 위치에 있는 모든 마커를 삭제
-                    PointLatLng markerPosition = marker.Position;
-                    List<GMapMarker> markersToRemove = markersOverlay.Markers
-                        .Where(x => x.Position == markerPosition).ToList(); // 나중에 리스트 출력해보겠음!
-                    foreach (GMapMarker m in markersToRemove)
-                    {
-                        Console.WriteLine("마커 좌표: " + m);
-                        markersOverlay.Markers.Remove(m);
-                    }
-
+                    markersOverlay.Markers.Remove(clickedMarker);
                     RouteMap.Update();
-                    markerCount = markerCount - 2;
+                    markerCount = markersOverlay.Markers.Count;
 
-                    RouteMap.MouseUp += RouteMap_MouseUp;
-                    btnNodeSelect.Enabled = true;
-                    enableMarkerCreation = true;
+                    // 마커 생성 버튼과 지도 클릭 이벤트 상태 조정
+                    if (markerCount < maxMarkerCount)
+                    {
+                        RouteMap.MouseUp += RouteMap_MouseUp;
+                        btnNodeSelect.Enabled = true;
+                        enableMarkerCreation = true;
+                    }
                 }
             }
         }
 
+
         private void RouteMap_MouseUp(object sender, MouseEventArgs e)
         {
-            //Console.WriteLine("forCheck: " + forCheck);
-            //forCheck++;
-
             if (enableMarkerCreation && e.Button == MouseButtons.Left)
             {
-                //markerCount++;
-
                 // 클릭한 위치를 위도, 경도로 변환
                 PointLatLng markerLocation = RouteMap.FromLocalToLatLng(e.X, e.Y);
+
+                // 해당 위치에 이미 마커가 있는지 확인
+                bool isMarkerExist = CheckIfMarkerExists(markerLocation);
+                if (isMarkerExist)
+                {
+                    // 이미 마커가 있는 경우 처리 로직 추가
+                    return;
+                }
 
                 // 마커 생성
                 GMarkerGoogle marker = new GMarkerGoogle(markerLocation, GMarkerGoogleType.red);
@@ -452,37 +407,26 @@ namespace EUV.Views
                 // 마커 개수 증가
                 markerCount = markersOverlay.Markers.Count;
 
-                Console.WriteLine("마커 갯수: " + (markersOverlay.Markers.Count).ToString());
-
-                // 사용자가 지정한 마커 개수를 초과하면 지도 클릭 이벤트를 해제하고 마커 생성 버튼 활성화
+                // 사용자가 지정한 마커 개수를 초과하면 지도 클릭 이벤트를 해제하고 마커 생성 버튼 비활성화
                 if (markerCount >= maxMarkerCount)
                 {
                     RouteMap.MouseUp -= RouteMap_MouseUp;
                     btnNodeSelect.Enabled = false;
                     enableMarkerCreation = false;
-
-                    //RouteMap.CanDragMap = true;
-                    //RouteMap.DragButton = MouseButtons.Left;
-
-                    //this.polygonSelector.PolygonSelected += polygonSelector_PolygonSelected;
-                    //this.drawPolygonCheckBox.CheckedChanged -= drawPolygonCheckBox_CheckedChanged;
-                    /*
-                    eventCheck_routeMap = true;
-
-                    this.polygonSelector.PolygonSelected -= polygonSelector_PolygonSelected;
-                    this.polygonSelector = new PolygonSelector(this.RouteMap, new Pen(Color.Red, 2), eventCheck_routeMap);
-                    this.polygonSelector.PolygonSelected += polygonSelector_PolygonSelected;
-                    */
-
-                    /*
-                    // 리스트 출력
-                    foreach (var location in markerLocations)
-                    {
-                        Console.WriteLine("위도: {0}, 경도: {1}", location.Lat, location.Lng);
-                    }
-                    */
                 }
             }
+        }
+
+        private bool CheckIfMarkerExists(PointLatLng location)
+        {
+            foreach (GMapMarker existingMarker in markersOverlay.Markers)
+            {
+                if (existingMarker.Position == location)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<PointLatLng> GetMarkerLocations()
@@ -523,7 +467,27 @@ namespace EUV.Views
 
         private void btnPath_Click(object sender, EventArgs e)
         {
+            foreach (Form openForm in System.Windows.Forms.Application.OpenForms)
+            {
+                if (openForm.Name == "AlgorithmsForm") // 열린 폼의 이름 검사
+                {
+                    if (openForm.WindowState == FormWindowState.Minimized)
+                    {
+                        // 폼을 최소화시켜 하단에 내려놓았는지 검사
+                        openForm.WindowState = FormWindowState.Normal;
+                    }
+                    openForm.Activate();
+                    return;
+                }
+            }
 
+            algorithmsForm = new AlgorithmsForm
+            {
+                Owner = this
+            };
+
+            algorithmsForm.SetLocationsValue(markersList);
+            algorithmsForm.Show();
         }
 
         public void LoadConfiguration()
@@ -557,7 +521,6 @@ namespace EUV.Views
                         }
                     }
                 }
-
             }
             catch (ConfigurationErrorsException)
             {
@@ -593,7 +556,7 @@ namespace EUV.Views
             int index1 = 0;
 
             markersList.Clear();
-            
+
             foreach (string check in checks)
             {
                 string selectedKey = "MarkerLocations-" + check; // 리스트뷰 경로명

@@ -779,3 +779,4 @@ C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV
 C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.exe
 C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.pdb
 C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.Views.RouteSave.resources
+C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.Views.AlgorithmsForm.resources

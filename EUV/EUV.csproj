@@ -296,6 +296,12 @@
     <Compile Include="Utility\StrCmpLogicalComparer.cs" />
     <Compile Include="Utility\Theme.cs" />
     <Compile Include="Utility\Tools.cs" />
+    <Compile Include="Views\AlgorithmsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\AlgorithmsForm.Designer.cs">
+      <DependentUpon>AlgorithmsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\BookMark.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -342,6 +348,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AlgorithmsForm.resx">
+      <DependentUpon>AlgorithmsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\BookMark.resx">
       <DependentUpon>BookMark.cs</DependentUpon>

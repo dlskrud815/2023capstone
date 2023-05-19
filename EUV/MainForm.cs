@@ -1393,10 +1393,10 @@ namespace EUV
                 {
                     id = int.Parse(row.SubItems[1].Text),
                     cmd = "ARM",
-                    param = "testparam"
+                    param = "testparam" //라즈베리에서는 ignore
                 };
-                string jstr = JsonSerializer.Serialize(cmdMessage);
-                int result = TcpSocket._getInstance()._sendmessage(jstr, int.Parse(row.SubItems[1].Text));
+                string jstr = JsonSerializer.Serialize(cmdMessage); //json string
+                int result = TcpSocket._getInstance()._sendmessage(jstr, int.Parse(row.SubItems[1].Text)); //
 
                 if (result == -1)
                 {
