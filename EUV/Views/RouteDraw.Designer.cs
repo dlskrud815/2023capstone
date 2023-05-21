@@ -207,6 +207,7 @@
             this.btnDeletePoly.TabIndex = 25;
             this.btnDeletePoly.Text = "다각형 삭제";
             this.btnDeletePoly.UseVisualStyleBackColor = true;
+            this.btnDeletePoly.Click += new System.EventHandler(this.btnDeletePoly_Click);
             // 
             // btnSavePoly
             // 
@@ -224,6 +225,7 @@
             this.btnSavePoly.TabIndex = 24;
             this.btnSavePoly.Text = "다각형 저장";
             this.btnSavePoly.UseVisualStyleBackColor = true;
+            this.btnSavePoly.Click += new System.EventHandler(this.btnSavePoly_Click);
             // 
             // drawPolygonCheckBox
             // 
@@ -259,6 +261,7 @@
             this.cboPoly.Size = new System.Drawing.Size(238, 33);
             this.cboPoly.TabIndex = 23;
             this.cboPoly.Text = "- 저장 다각형 -";
+            this.cboPoly.SelectedIndexChanged += new System.EventHandler(this.cboPoly_SelectedIndexChanged);
             // 
             // btnNodeSelect
             // 

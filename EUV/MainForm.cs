@@ -12,6 +12,7 @@ using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -50,6 +51,7 @@ namespace EUV
         LEDSettings ledSetting;
         BookMark bookMark;
         RouteDraw routeDraw;
+        AlgorithmsForm algorithmsForm;
 
         //음악
         private MediaPlayer mMediaPlayer = new MediaPlayer();
@@ -72,6 +74,15 @@ namespace EUV
 
         //선택한 드론 갯수
         public static int selectDroneNum;
+
+        //이나경 추가 05-20
+        public List<string> ids = new List<string>();
+        public List<string> gpsValues = new List<string>();
+
+        public List<string> ids_forCheck = new List<string>();
+        public List<string> gpsValues_forCheck = new List<string>();
+        //05-20
+
 
         public MainForm()
         {
@@ -791,6 +802,54 @@ namespace EUV
                         btnGo.Enabled = btnFGo.Enabled = true;
 
                 });
+
+                //이나경 추가
+                foreach (ListViewItem item in listView.Items)
+                {
+                    string id = item.SubItems[1].Text;
+                    string gps = item.SubItems[3].Text;
+
+                    ids.Add(id);
+                    gpsValues.Add(gps);
+                }
+
+                //확인용
+                double lat_forCheck1 = 35.6097280230333; double lng_forCheck1 = 129.37530189742645;
+                double lat_forCheck2 = 35.60973456361103; double lng_forCheck2 = 129.37498922332017;
+                double lat_forCheck3 = 35.60960444999368; double lng_forCheck3 = 129.37501082150965;
+
+                string gps1 = lat_forCheck1.ToString() + "," + lng_forCheck1;
+                string gps2 = lat_forCheck2.ToString() + "," + lng_forCheck2;
+                string gps3 = lat_forCheck3.ToString() + "," + lng_forCheck3;
+
+
+                ids_forCheck = new List<string> { "1", "2", "3" };
+                gpsValues_forCheck = new List<string> { gps1, gps2, gps3 };
+
+                /*
+                for (int i = 0; i < ids_forCheck.Count && i < gpsValues_forCheck.Count; i++)
+                {
+                    Console.WriteLine($"algo_ids: {ids_forCheck[i]}, algo_gpsValues: {gpsValues_forCheck[i]}");
+                }
+                */
+
+                //AlgorithmsForm algorithmsForm = new AlgorithmsForm();
+                //algorithmsForm.SetDroneValue(ids, gpsValues);
+
+                /*
+                Console.WriteLine("IDs:");
+                foreach (string id in ids)
+                {
+                    Console.WriteLine(id);
+                }
+
+                Console.WriteLine("GPS Values:");
+                foreach (string gps in gpsValues)
+                {
+                    Console.WriteLine(gps);
+                }
+                */
+                //추가
             }
             catch { }
             finally
@@ -1279,10 +1338,13 @@ namespace EUV
                 }
             }
 
-            routeDraw = new RouteDraw
+            routeDraw = new RouteDraw(this)
             {
                 Owner = this
             };
+
+            //routeDraw.SetDroneValue1(ids, gpsValues);
+            routeDraw.SetDroneValue1(ids_forCheck, gpsValues_forCheck);
             routeDraw.Show();
         }
 
@@ -2200,6 +2262,8 @@ namespace EUV
         }
 
         #endregion < to - 위치 태그 >
+
+        //리스트뷰 ids, gps 전달
 
     }
 }

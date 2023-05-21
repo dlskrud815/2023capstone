@@ -18,10 +18,26 @@ namespace EUV.Views
         public List<List<PointLatLng>> droneLocationsList { get; private set; } = new List<List<PointLatLng>>();
         public double[][] drone_distance;
 
-        public AlgorithmsForm()
+        public List<string> algo_ids { get; set; } = new List<string>();
+        public List<string> algo_gpsValues { get; set; } = new List<string>();
+
+        private MainForm mainForm;
+
+        public AlgorithmsForm(MainForm mainForm)
         {
+            this.mainForm = mainForm;
             InitializeComponent();
         }
+
+        public void SetDroneValue2(List<string> ids, List<string> gpsValues)
+        {
+            algo_ids.Clear(); // Clear the existing items before populating
+            algo_gpsValues.Clear(); // Clear the existing items before populating
+
+            algo_ids.AddRange(ids); // Add all items from the 'ids' list
+            algo_gpsValues.AddRange(gpsValues); // Add all items from the 'gpsValues' list
+        }
+
 
         public void SetLocationsValue(List<List<PointLatLng>> value)
         {
@@ -49,6 +65,22 @@ namespace EUV.Views
 
         private void btnAlgorithms_Click(object sender, EventArgs e)
         {
+            // MainForm의 인스턴스를 통해 값을 가져옴
+            List<string> algo_ids  = mainForm.ids_forCheck;
+            List<string> algo_gpsValues = mainForm.gpsValues_forCheck;
+
+            Console.WriteLine();
+            Console.WriteLine("경로 개수: " + droneLocationsList.Count);
+
+            Console.WriteLine("리스트 확인 : 개수: " + algo_ids.Count);
+
+            // 결과 출력
+            for (int i = 0; i < algo_ids.Count && i < algo_gpsValues.Count; i++)
+            {
+                Console.WriteLine($"algo_ids: {algo_ids[i]}, algo_gpsValues: {algo_gpsValues[i]}");
+            }
+
+
             Console.WriteLine();
             foreach (var locations in droneLocationsList)
             {

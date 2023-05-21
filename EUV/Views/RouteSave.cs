@@ -352,7 +352,7 @@ namespace EUV.Views
             {
                 listView2.Items.Remove(selectedItem);
                 listView2.Items.Insert(selectedIndex - 1, selectedItem);
-
+                
                 // 선택한 항목을 위로 이동시킴
                 listView2.Items[selectedIndex - 1].Selected = true;
                 listView2.Items[selectedIndex - 1].EnsureVisible();

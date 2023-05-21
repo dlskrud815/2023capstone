@@ -14,10 +14,17 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media.Media3D;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using DrawingPoint = System.Drawing.Point;
+using WindowsPoint = System.Windows.Point;
+
 
 namespace EUV.Views
 {
@@ -54,7 +61,9 @@ namespace EUV.Views
         #region Field
 
         /// 다각형 리스트
-        private List<Point[]> polygonList = new List<Point[]>();
+        //private List<Point[]> polygonList = new List<Point[]>();
+        private List<DrawingPoint[]> polygonList = new List<DrawingPoint[]>();
+
 
         /// 다각형 선택자
         private PolygonSelector polygonSelector;
@@ -67,13 +76,30 @@ namespace EUV.Views
 
         #endregion
 
-        public RouteDraw()
+        private MainForm mainForm;
+
+        public List<string> algo_ids { get; set; } = new List<string>();
+        public List<string> algo_gpsValues { get; set; } = new List<string>();
+
+        public void SetDroneValue1(List<string> ids, List<string> gpsValues)
         {
+            algo_ids.Clear(); // Clear the existing items before populating
+            algo_gpsValues.Clear(); // Clear the existing items before populating
+
+            algo_ids.AddRange(ids); // Add all items from the 'ids' list
+            algo_gpsValues.AddRange(gpsValues); // Add all items from the 'gpsValues' list
+        }
+
+        public RouteDraw(MainForm mainForm)
+        {
+            this.mainForm = mainForm;
+
             InitializeComponent();
             RouteMapInitializing();
             //LoadConfiguration();
 
             cboRoute.SelectedIndexChanged += cboRoute_SelectedIndexChanged;
+            cboPoly.SelectedIndexChanged += cboPoly_SelectedIndexChanged;
 
             // Register the OnMapZoomChanged event handler
             RouteMap.OnMapZoomChanged += RouteMap_OnMapZoomChanged;
@@ -309,14 +335,15 @@ namespace EUV.Views
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            using (Pen pen = new Pen(Color.Green, 2))
+            using (Pen pen = new Pen(Color.Blue, 2))
             {
-                foreach (Point[] pointArray in this.polygonList)
+                foreach (DrawingPoint[] pointArray in this.polygonList)
                 {
                     e.Graphics.DrawPolygon(pen, pointArray);
                 }
             }
         }
+
         #endregion
 
         private void btnRemoveDraw_Click(object sender, EventArgs e)
@@ -324,6 +351,7 @@ namespace EUV.Views
             // Clear all drawings
             this.polygonList.Clear();
             this.RouteMap.Invalidate(); // 지운 후, 지도를 다시 그려줍니다.
+            cboPoly.Text = "- 저장 다각형 -";
         }
 
 
@@ -354,7 +382,7 @@ namespace EUV.Views
                 menu.MenuItems.Add(deleteItem);
 
                 RouteMap.ContextMenu = menu;
-                RouteMap.ContextMenu.Show(RouteMap, new Point(e.X, e.Y));
+                RouteMap.ContextMenu.Show(RouteMap, new System.Drawing.Point(e.X, e.Y));
             }
         }
         private void deleteItem_Click(object sender, EventArgs e)
@@ -481,12 +509,13 @@ namespace EUV.Views
                 }
             }
 
-            algorithmsForm = new AlgorithmsForm
+            algorithmsForm = new AlgorithmsForm(this.mainForm)
             {
                 Owner = this
             };
 
             algorithmsForm.SetLocationsValue(markersList);
+            algorithmsForm.SetDroneValue2(algo_ids, algo_gpsValues);
             algorithmsForm.Show();
         }
 
@@ -518,6 +547,32 @@ namespace EUV.Views
                         {
                             string routeName = key.Substring("MarkerList-".Length);
                             cboRoute.Items.Add(routeName);
+                        }
+                    }
+                }
+
+                if (cboPoly.InvokeRequired)
+                {
+                    cboPoly.Invoke(new Action(() =>
+                    {
+                        foreach (var key in appSettings.AllKeys)
+                        {
+                            if (key.StartsWith("PolygonCheck-"))
+                            {
+                                string polyName = key.Substring("PolygonCheck-".Length);
+                                cboPoly.Items.Add(polyName);
+                            }
+                        }
+                    }));
+                }
+                else
+                {
+                    foreach (var key in appSettings.AllKeys)
+                    {
+                        if (key.StartsWith("PolygonCheck-"))
+                        {
+                            string polyName = key.Substring("PolygonCheck-".Length);
+                            cboPoly.Items.Add(polyName);
                         }
                     }
                 }
@@ -593,18 +648,170 @@ namespace EUV.Views
 
                 index1++;
             }
+        }
 
-            /*
-            Console.WriteLine();
-            foreach (var locations in markersList) ** 지훈님쓰 이렇게 markerList에서 일반리스트에 double로 넣든 해서 알고리즘 돌리면 될 듯쓰?
+        private void btnSavePoly_Click(object sender, EventArgs e)
+        {
+            List<string> pointStrings = new List<string>();
+            List<string> pointNumStrings = new List<string>();
+
+            int pointIndexCheck = 0;
+            int numCheck = 0;
+
+            foreach (var pointArray in this.polygonList)
             {
-                Console.WriteLine();
-                foreach (var location in locations)
+                pointIndexCheck++;
+
+                if(pointIndexCheck%2 == 1)
                 {
-                    Console.WriteLine("위도: {0}, 경도: {1}", location.Lat, location.Lng);
+                    numCheck++;
+
+                    foreach (var point in pointArray)
+                    {
+                        string xyString = $"{point.X},{point.Y}";
+                        pointStrings.Add(xyString);
+
+                        //Console.WriteLine("포인트리스트: " + point.ToString());
+                    }
                 }
             }
-            */
+
+            //다각형 갯수, 다각형 꼭짓점 갯수
+            pointNumStrings.Add(numCheck.ToString());
+
+            pointIndexCheck = 0;
+
+            foreach (var pointArray in this.polygonList)
+            {
+                pointIndexCheck++;
+
+                if (pointIndexCheck % 2 == 0)
+                {
+                    int pointNumCheck = 0;
+
+                    foreach (var point in pointArray)
+                    {
+                        pointNumCheck++;
+                    }
+                    pointNumStrings.Add(pointNumCheck.ToString());
+                }
+            }
+
+            string savePoints = string.Join(";", pointStrings);
+            string numPoints = string.Join(";", pointNumStrings); 
+            //ex) 삼각형1 사각형1을 그렸을 경우, [도형 갯수, 도형1 꼭짓점 갯수, 도형2 꼭짓점 갯수] -> [2,3,4]로 표시
+
+            Console.WriteLine("포인트리스트: " + savePoints + "다각형 갯수: " + numPoints);
+
+            ///*
+            if (cboPoly.Text != "" && cboPoly.Text != "- 저장 다각형 -")
+            {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var appSettings = configFile.AppSettings.Settings;
+
+                // 설정 파일에 다각형의 pointList를 저장
+                string polygonKey1 = "PolygonPoint-" + cboPoly.Text;
+                string polygonValue1 = savePoints;
+
+                string polygonKey2 = "PolygonCheck-" + cboPoly.Text;
+                string polygonValue2 = numPoints;
+
+                appSettings.Add(polygonKey1, polygonValue1);
+                appSettings.Add(polygonKey2, polygonValue2);
+
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+
+                // cboPoly 콤보박스에 항목 추가
+                cboPoly.Items.Add(cboPoly.Text);
+
+                // txtRouteSaveName 텍스트 초기화
+                cboPoly.Text = "- 저장 다각형 -";
+            }
+            else
+            {
+                MessageBox.Show("다각형 저장명을 확인해주세요.", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                cboPoly.SelectAll();
+            }
+            //*/
+        }
+
+        private void cboPoly_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.polygonList.Clear();
+            this.RouteMap.Invalidate(); // 지운 후, 지도를 다시 그려줍니다.
+
+            string selectedPointArray = cboPoly.SelectedItem.ToString(); //선택 경로명
+
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appSettings = configFile.AppSettings.Settings;
+
+            string key1 = "PolygonPoint-" + selectedPointArray;
+            string key2 = "PolygonCheck-" + selectedPointArray;
+
+            string configValue1 = ConfigurationManager.AppSettings[key1];
+            string configValue2 = ConfigurationManager.AppSettings[key2];
+
+            string[] polyPointStrings = configValue1.Split(';');
+            string[] polyCheckStrings = configValue2.Split(';');
+
+            List<System.Drawing.Point> pointList = new List<System.Drawing.Point>();
+            List<int> polyCheck = new List<int>();
+
+            foreach (string checkString in polyCheckStrings)
+            {
+                polyCheck.Add(int.Parse(checkString));
+            }
+
+            foreach (string pointString in polyPointStrings)
+            {
+                string[] coordinates = pointString.Split(',');
+
+                int X = int.Parse(coordinates[0]);
+                int Y = int.Parse(coordinates[1]);
+
+                System.Drawing.Point point = new System.Drawing.Point(X, Y);
+                pointList.Add(point);
+            }
+
+            int drawPolyNum = polyCheck[0];
+            int indexCheck = 0;
+
+            this.polygonList.Clear();
+
+            for (int i=1; i<polyCheck.Count(); i++)
+            { 
+                int drawPointNum = polyCheck[i];
+                //this.polygonList.Add(e.PointList.ToArray());
+                this.polygonList.Add(pointList.GetRange(indexCheck, drawPointNum).ToArray());
+                indexCheck += drawPointNum;
+            }
+            
+            this.RouteMap.Paint += RouteMap_Paint;
+        }
+
+        private void btnDeletePoly_Click(object sender, EventArgs e)
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appSettings = configFile.AppSettings.Settings;
+
+            string name1 = "PolygonPoint-" + cboPoly.SelectedItem.ToString(); // ex) MarkerLocations-경로1
+            string name2 = "PolygonCheck-" + cboPoly.SelectedItem.ToString();
+
+            string key1 = appSettings.AllKeys.FirstOrDefault(k => k.EndsWith(name1));
+            string key2 = appSettings.AllKeys.FirstOrDefault(k => k.EndsWith(name2));
+
+            // 해당 name을 가진 항목 제거
+            if (key1 != null || key2 != null)
+            {
+                appSettings.Remove(key1);
+                appSettings.Remove(key2);
+            }
+
+            configFile.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+
+            cboPoly.Text = "- 저장 다각형 -";
         }
     }
 }
