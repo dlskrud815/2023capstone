@@ -780,3 +780,7 @@ C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV
 C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.pdb
 C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.Views.RouteSave.resources
 C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\obj\Debug\EUV.Views.AlgorithmsForm.resources
+C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\bin\Debug\Accord.dll.config
+C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\bin\Debug\Accord.xml
+C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\bin\Debug\Accord.Math.xml
+C:\Users\lng\OneDrive - UOU\바탕 화면\git\Capstone\2023-04-05capstoneGCS\EUV\bin\Debug\Accord.Math.Core.xml

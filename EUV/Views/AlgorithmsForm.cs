@@ -7,21 +7,40 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.Json;
+using Accord.Math.Optimization;
+using EUV.Sockets;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EUV.Views
 {
     public partial class AlgorithmsForm : MaterialForm
     {
         public List<List<PointLatLng>> droneLocationsList { get; private set; } = new List<List<PointLatLng>>();
+       
+        private static AllAboutMessages _instance;
+        private List<VehicleMessage> vehicleMessages = new List<VehicleMessage>();
+
         public double[][] drone_distance;
 
-        public List<string> algo_ids { get; set; } = new List<string>();
-        public List<string> algo_gpsValues { get; set; } = new List<string>();
+        public double[] drone_Lng;
+        public double[] drone_Lat;
+
+        public double[] marker_Lng;
+        public double[] marker_Lat;
+
+        public string[] drone_id;
+        public string[] marker_id;
 
         private MainForm mainForm;
+        public List<string> algo_ids { get; set; } = new List<string>();
+        public List<string> algo_gpsValues { get; set; } = new List<string>();
 
         public AlgorithmsForm(MainForm mainForm)
         {
@@ -44,35 +63,36 @@ namespace EUV.Views
             droneLocationsList = value;
         }
 
+        public List<VehicleMessage> VehicleMessages
+        {
+            get => vehicleMessages;
+            //set => vehicleMessages = value;
+        }
+
+        private static AllAboutMessages _getInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new AllAboutMessages();
+            }
+            return _instance;
+        }
+
         private void AlgorithmsForm_Load(object sender, EventArgs e)
         {
-            /*
-            for(int i = 0; i < droneLocationsList.Count; i++)
-            {
-                drone_distance[i] = new double[droneLocationsList.Count];
-
-                for(int j = 0; j < droneLocationsList.Count; j++)
-                {
-                   double tmp_marker_Lat = double.Parse(droneLocationsList[j].Lat);
-                   double tmp_marker_Lng = double.Parse(droneLocationsList[j].Lng);
-
-                }
-
-            }
-            */
-
+        
         }
 
         private void btnAlgorithms_Click(object sender, EventArgs e)
         {
             // MainForm의 인스턴스를 통해 값을 가져옴
-            List<string> algo_ids  = mainForm.ids_forCheck;
+            List<string> algo_ids = mainForm.ids_forCheck;
             List<string> algo_gpsValues = mainForm.gpsValues_forCheck;
 
             Console.WriteLine();
             Console.WriteLine("경로 개수: " + droneLocationsList.Count);
 
-            Console.WriteLine("리스트 확인 : 개수: " + algo_ids.Count);
+            Console.WriteLine("리스트 확인 : 개수: " + algo_ids.Count); ////******************************* 이나경 05-22 algo_ids.Count 뽑아쓰면 될 듯
 
             // 결과 출력
             for (int i = 0; i < algo_ids.Count && i < algo_gpsValues.Count; i++)
@@ -90,13 +110,174 @@ namespace EUV.Views
                     Console.WriteLine("위도: {0}, 경도: {1}", location.Lat, location.Lng);
                 }
             }
+            // ******* 이나경
+
+            string[] drone_id = new string[2];
+            string[] marker_id = new string[2];
+
+
+            double[] marker_Lng = new double[2];
+            double[] marker_Lat = new double[2];
+
+
+            double[] drone_Lng = new double[2]; // ******* 이나경 
+            double[] drone_Lat = new double[2]; //
+
+            /*
+            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
+            {
+                string select = vm.selected.ToString();
+                string id = vm.id.ToString();
+                double lat = vm.gps_c_lat;
+                double lng = vm.gps_c_lng;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    drone_id[i] = id;
+                    drone_Lat[i] = lat;
+                    drone_Lng[i] = lng;
+                    Console.WriteLine(drone_id[i]);
+                    Console.WriteLine(drone_Lat[i]);
+                    Console.WriteLine(drone_Lng[i]);
+                }
+            }));
+            */
+
+            /*
+            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
+            {
+                int cnt1 = 0;
+
+                string select = vm.selected.ToString();
+                string id = vm.id.ToString();
+                double lat = vm.gps_c_lat;
+                double lng = vm.gps_c_lng;
+
+                int i = cnt1;
+
+                drone_id[i] = id;
+                drone_Lat[i] = lat;
+                drone_Lng[i] = lng;
+                Console.WriteLine(drone_id[i]);
+                Console.WriteLine(drone_Lat[i]);
+                Console.WriteLine(drone_Lng[i]);
+
+                cnt1++;
+            }));
+            */
+
+            int droneIndex = 0; // 드론 인덱스 변수 추가
+
+            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
+            {
+                string select = vm.selected.ToString();
+                string id = vm.id.ToString();
+                double lat = vm.gps_c_lat;
+                double lng = vm.gps_c_lng;
+
+                if (droneIndex < 2) // 드론 인덱스가 2보다 작은 경우에만 초기화
+                {
+                    drone_id[droneIndex] = id;
+                    drone_Lat[droneIndex] = lat;
+                    drone_Lng[droneIndex] = lng;
+                    Console.WriteLine(drone_id[droneIndex]);
+                    Console.WriteLine(drone_Lat[droneIndex]);
+                    Console.WriteLine(drone_Lng[droneIndex]);
+                    droneIndex++;
+                }
+            }));
+
+            int cnt2 = 0;
+
+            foreach (var locations in droneLocationsList)
+            {
+                foreach (var location in locations)
+                {
+                    int j = cnt2;
+                    marker_id[j] = j.ToString();
+                    marker_Lat[j] = location.Lat;
+                    marker_Lng[j] = location.Lng;
+                    Console.WriteLine(marker_Lat[j]);
+
+                    cnt2++;
+                }
+            }
+
+            /*
+            double[][] drone_distance = new double[2][];
+            for (int i = 0; i < 2; i++)
+            {
+                drone_distance[i] = new double[2];
+            }
+            */
+
+            // drone_distance 배열 초기화
+            drone_distance = new double[2][];
+            for (int i = 0; i < 2; i++)
+            {
+                drone_distance[i] = new double[2];
+            }
+
+
+            for (int k = 0; k < 2; k++)
+            {
+                drone_distance[k] = new double[2];
+                for (int n = 0; n < 2; n++)
+                {
+                    drone_distance[k][n] = HaversineDistance(drone_Lat[k], drone_Lng[k], marker_Lat[n], marker_Lng[n]);
+                    richTextBox1.Text += drone_distance[k][n] + "\t";
+                }
+                richTextBox1.Text += "\n";
+            }
+
+            Munkres m = new Munkres(drone_distance);
+
+            bool success = m.Maximize();    // solve it (should return true)
+            double[] solution = m.Solution; // Solution will be 0, 1, 2
+            double minimumCost = m.Value;
+
+            for (int i = 0; i < solution.Length; i++)
+            {
+                richTextBox1.Text += drone_id[i] + ">>>>>" + marker_id[(int)solution[i]] + "\n";
+            }
         }
+
 
         private void btnDroneMove_Click(object sender, EventArgs e)
         {
+            Munkres m = new Munkres(drone_distance);
 
+            bool success = m.Maximize();    // solve it (should return true)
+            double[] solution = m.Solution; // Solution will be 0, 1, 2
+            double minimumCost = m.Value;
+
+            for (int i = 0; i < solution.Length; i++)
+            {
+                string paramJson = string.Format("{{'LAT':'{0}','LNG':{1},'ALT':{2}}}", marker_Lat[(int)solution[i]], marker_Lng[(int)solution[i]], "0");
+                
+                SendMessage cmdMessage = new SendMessage
+                {
+                    id = int.Parse(drone_id[i]),
+                    cmd = "GOHERE",
+                    param = paramJson
+                };
+                string jstr = JsonSerializer.Serialize(cmdMessage);
+                int result = TcpSocket._getInstance()._sendmessage(jstr, int.Parse(drone_id[i]));
+
+                if (result == -1)
+                {
+                    removeVehicle(cmdMessage.id);
+                }
+            }
         }
 
+
+        public void removeVehicle(int id)
+        {
+            var index = AllAboutMessages._getInstance().VehicleMessages.FindIndex(c => c.id == id);
+            if (index >= 0)
+                AllAboutMessages._getInstance().VehicleMessages.RemoveAt(index);
+        }
         public static double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
         {
             var R = 6371; //지구 반지름 (km)

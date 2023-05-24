@@ -806,8 +806,8 @@ namespace EUV
                 //이나경 추가
                 foreach (ListViewItem item in listView.Items)
                 {
-                    string id = item.SubItems[1].Text;
-                    string gps = item.SubItems[3].Text;
+                    string id = item.SubItems[0].Text; //*************** 이나경 05-22
+                    string gps = item.SubItems[2].Text;
 
                     ids.Add(id);
                     gpsValues.Add(gps);
@@ -822,9 +822,11 @@ namespace EUV
                 string gps2 = lat_forCheck2.ToString() + "," + lng_forCheck2;
                 string gps3 = lat_forCheck3.ToString() + "," + lng_forCheck3;
 
+                ids_forCheck = ids; // *************************** 이나경 05-22 나중에 고쳐
+                gpsValues_forCheck = gpsValues;
 
-                ids_forCheck = new List<string> { "1", "2", "3" };
-                gpsValues_forCheck = new List<string> { gps1, gps2, gps3 };
+                //ids_forCheck = new List<string> { "1", "2", "3" }; //********************** 이나경 05-22
+                //gpsValues_forCheck = new List<string> { gps1, gps2, gps3 };
 
                 /*
                 for (int i = 0; i < ids_forCheck.Count && i < gpsValues_forCheck.Count; i++)

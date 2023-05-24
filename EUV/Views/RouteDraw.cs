@@ -23,6 +23,7 @@ using System.Windows.Media.Media3D;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using DrawingPoint = System.Drawing.Point;
+using Point = System.Drawing.Point;
 using WindowsPoint = System.Windows.Point;
 
 
@@ -128,7 +129,7 @@ namespace EUV.Views
 
             draw_marker = false;
 
-            marker_num = int.Parse(numTest.Text);
+            marker_num = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
             Console.WriteLine("선택 드론 갯수: " + marker_num.ToString());
             //선택 드론 갯수
 
@@ -357,7 +358,7 @@ namespace EUV.Views
 
         private void btnNodeSelect_Click(object sender, EventArgs e)
         {
-            maxMarkerCount = int.Parse(numTest.Text);
+            maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
 
             // 지도 클릭 이벤트 등록
             RouteMap.MouseUp -= RouteMap_MouseUp; // 두 번씩 클릭 이벤트 발생하는 거 해결
@@ -488,7 +489,7 @@ namespace EUV.Views
                 Owner = this
             };
 
-            routeSave.SetNumTestValue(numTest.Text);
+            routeSave.SetNumTestValue(droneNum.Text); // ******************** 이나경 05-22
             routeSave.SetMarkerLocations(markerLocations);
             routeSave.Show();
         }
@@ -812,6 +813,166 @@ namespace EUV.Views
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
 
             cboPoly.Text = "- 저장 다각형 -";
+        }
+
+        private void btnAutoSelect_Click(object sender, EventArgs e)
+        {
+            RouteMap.MouseUp -= RouteMap_MouseUp; // 두 번씩 클릭 이벤트 발생하는 거 해결
+            RouteMap.MouseUp += RouteMap_MouseUp;
+
+            // 마커 생성 버튼 비활성화
+            btnNodeSelect.Enabled = false;
+
+            // 마커 생성 활성
+            enableMarkerCreation = false;
+
+            // 중복 생성 polyList Distinct
+            List<Point[]> distinctPolygons = polygonList.Distinct(new PointArrayEqualityComparer()).ToList();
+
+            // 다각형의 개수와 꼭짓점 개수 확인
+            int polygonCount = distinctPolygons.Count;
+            List<int> vertexCounts = distinctPolygons.Select(polygon => polygon.Length).ToList();
+
+            // 마커 개수 확인
+            maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+
+            // 다각형의 개수와 각 다각형의 꼭짓점 개수 출력
+            Console.WriteLine("다각형 개수: " + polygonCount);
+            Console.WriteLine("다각형의 꼭짓점 개수: " + string.Join(", ", vertexCounts));
+
+            // 꼭짓점 개수가 마커 개수보다 작을 경우 안내 메시지 표시
+            if (vertexCounts.Sum() > maxMarkerCount)
+            {
+                MessageBox.Show("마커 개수가 다각형의 꼭짓점 개수보다 작습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                // 각 다각형의 꼭짓점에 마커 생성
+                foreach (var polygon in distinctPolygons)
+                {
+                    foreach (var vertex in polygon)
+                    {
+                        // Create a marker for each vertex
+                        PointLatLng markerLocation = RouteMap.FromLocalToLatLng(vertex.X, vertex.Y);
+                        GMarkerGoogle marker1 = new GMarkerGoogle(markerLocation, GMarkerGoogleType.red);
+                        markersOverlay.Markers.Add(marker1);
+                        markerLocations.Add(markerLocation);
+                    }
+                }
+
+                // Calculate the total number of markers required
+                int totalMarkersNeeded = distinctPolygons.SelectMany(polygon => polygon).Count();
+
+                // Calculate the remaining markers to distribute
+                int remainingMarkers = Math.Max(0, maxMarkerCount - totalMarkersNeeded);
+
+                // Create markers maintaining minimum distance between them
+                markerLocations = new List<PointLatLng>();
+
+                // Distribute the remaining markers evenly within the lines
+                if (remainingMarkers > 0 && polygonCount >= 1)
+                {
+                    int markersPerLine = remainingMarkers / polygonCount; // 각 직선당 배치할 마커 개수
+                    int remainingMarkersPerLine = remainingMarkers % polygonCount; // 남은 마커를 균등하게 배치할 직선 개수
+
+                    int currentMarkersPerLine = markersPerLine + (remainingMarkersPerLine > 0 ? 1 : 0); // 현재 직선에 배치할 마커 개수
+
+                    foreach (var polygon in distinctPolygons)
+                    {
+                        int vertexCount = polygon.Length;
+
+                        PointLatLng startPoint = RouteMap.FromLocalToLatLng(polygon[0].X, polygon[0].Y);
+                        PointLatLng endPoint = RouteMap.FromLocalToLatLng(polygon[vertexCount - 1].X, polygon[vertexCount - 1].Y);
+                        double distance = GetDistance(startPoint, endPoint);
+
+                        int markersToDistribute = currentMarkersPerLine; // 현재 직선에 배치할 마커 개수
+
+                        for (int i = 1; i < vertexCount; i++)
+                        {
+                            if (markersToDistribute <= 0)
+                                break;
+
+                            PointLatLng currentVertex = RouteMap.FromLocalToLatLng(polygon[i].X, polygon[i].Y);
+                            PointLatLng nextVertex = RouteMap.FromLocalToLatLng(polygon[(i + 1) % vertexCount].X, polygon[(i + 1) % vertexCount].Y);
+
+                            double segmentDistance = GetDistance(currentVertex, nextVertex);
+                            double segmentInterval = segmentDistance / (markersToDistribute + 1); // 현재 직선 내에서 마커 간격 계산
+
+                            // Create markers between current and next vertices with minimum distance
+                            for (int j = 1; j <= markersToDistribute; j++)
+                            {
+                                double ratio = j * segmentInterval / segmentDistance; // 간격 비율 계산
+
+                                double latitude = currentVertex.Lat + (nextVertex.Lat - currentVertex.Lat) * ratio;
+                                double longitude = currentVertex.Lng + (nextVertex.Lng - currentVertex.Lng) * ratio;
+
+                                PointLatLng markerLocation = new PointLatLng(latitude, longitude);
+
+                                // 중복 체크
+                                bool isDuplicate = markerLocations.Any(existingMarkerLocation =>
+                                    Math.Abs(existingMarkerLocation.Lat - markerLocation.Lat) < 1e-6 &&
+                                    Math.Abs(existingMarkerLocation.Lng - markerLocation.Lng) < 1e-6);
+
+                                if (!isDuplicate)
+                                {
+                                    GMarkerGoogle marker = new GMarkerGoogle(markerLocation, GMarkerGoogleType.blue);
+                                    markersOverlay.Markers.Add(marker);
+                                    markerLocations.Add(markerLocation);
+
+                                    markersToDistribute--;
+
+                                    if (markersOverlay.Markers.Count >= maxMarkerCount)
+                                    {
+                                        RouteMap.MouseUp -= RouteMap_MouseUp;
+                                        btnNodeSelect.Enabled = false;
+                                        enableMarkerCreation = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        currentMarkersPerLine = markersPerLine; // 다음 직선에 배치할 마커 개수
+                        remainingMarkersPerLine--; // 남은 직선 개수 감소
+                    }
+                }
+
+                // Disable marker creation if maximum marker count is reached
+                if (markersOverlay.Markers.Count >= maxMarkerCount)
+                {
+                    RouteMap.MouseUp -= RouteMap_MouseUp;
+                    btnNodeSelect.Enabled = false;
+                    btnAutoSelect.Enabled = false;
+                    enableMarkerCreation = false;
+                }
+            }
+        }
+
+        public static double GetDistance(PointLatLng point1, PointLatLng point2)
+        {
+            double R = 6371; // 지구의 반경 (km)
+
+            double lat1 = point1.Lat;
+            double lon1 = point1.Lng;
+            double lat2 = point2.Lat;
+            double lon2 = point2.Lng;
+
+            double dLat = ToRadians(lat2 - lat1);
+            double dLon = ToRadians(lon2 - lon1);
+
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+            double distance = R * c;
+
+            return distance;
+        }
+
+        private static double ToRadians(double degrees)
+        {
+            return degrees * Math.PI / 180;
         }
     }
 }

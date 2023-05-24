@@ -293,6 +293,7 @@
             this.btnAutoSelect.TabIndex = 22;
             this.btnAutoSelect.Text = "자동 선택";
             this.btnAutoSelect.UseVisualStyleBackColor = true;
+            this.btnAutoSelect.Click += new System.EventHandler(this.btnAutoSelect_Click);
             // 
             // droneNum
             // 
@@ -325,9 +326,9 @@
             this.numTest.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
             this.numTest.Location = new System.Drawing.Point(776, 14);
             this.numTest.Name = "numTest";
-            this.numTest.Size = new System.Drawing.Size(22, 22);
+            this.numTest.Size = new System.Drawing.Size(34, 22);
             this.numTest.TabIndex = 22;
-            this.numTest.Text = "6";
+            this.numTest.Text = "12";
             this.numTest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // grpDraw
