@@ -20,6 +20,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EUV.Views
 {
+   
     public partial class AlgorithmsForm : MaterialForm
     {
         public List<List<PointLatLng>> droneLocationsList { get; private set; } = new List<List<PointLatLng>>();
@@ -37,6 +38,8 @@ namespace EUV.Views
 
         public string[] drone_id;
         public string[] marker_id;
+
+        public int numDrone;
 
         private MainForm mainForm;
         public List<string> algo_ids { get; set; } = new List<string>();
@@ -85,6 +88,11 @@ namespace EUV.Views
 
         private void btnAlgorithms_Click(object sender, EventArgs e)
         {
+            foreach (var droneList in droneLocationsList)
+            {
+                numDrone = droneList.Count;
+            }
+
             // MainForm의 인스턴스를 통해 값을 가져옴
             List<string> algo_ids = mainForm.ids_forCheck;
             List<string> algo_gpsValues = mainForm.gpsValues_forCheck;
@@ -112,16 +120,16 @@ namespace EUV.Views
             }
             // ******* 이나경
 
-            string[] drone_id = new string[2];
-            string[] marker_id = new string[2];
+            drone_id = new string[numDrone];
+            marker_id = new string[numDrone];
 
 
-            double[] marker_Lng = new double[2];
-            double[] marker_Lat = new double[2];
+            marker_Lng = new double[numDrone];
+            marker_Lat = new double[numDrone];
 
 
-            double[] drone_Lng = new double[2]; // ******* 이나경 
-            double[] drone_Lat = new double[2]; //
+            drone_Lng = new double[numDrone]; // ******* 이나경 
+            drone_Lat = new double[numDrone]; //
 
             /*
             AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
@@ -175,7 +183,7 @@ namespace EUV.Views
                 double lat = vm.gps_c_lat;
                 double lng = vm.gps_c_lng;
 
-                if (droneIndex < 2) // 드론 인덱스가 2보다 작은 경우에만 초기화
+                if (droneIndex < numDrone) // 드론 인덱스가 2보다 작은 경우에만 초기화
                 {
                     drone_id[droneIndex] = id;
                     drone_Lat[droneIndex] = lat;
@@ -212,17 +220,17 @@ namespace EUV.Views
             */
 
             // drone_distance 배열 초기화
-            drone_distance = new double[2][];
-            for (int i = 0; i < 2; i++)
+            drone_distance = new double[numDrone][];
+            for (int i = 0; i < numDrone; i++)
             {
-                drone_distance[i] = new double[2];
+                drone_distance[i] = new double[numDrone];
             }
 
 
-            for (int k = 0; k < 2; k++)
+            for (int k = 0; k < numDrone; k++)
             {
-                drone_distance[k] = new double[2];
-                for (int n = 0; n < 2; n++)
+                //drone_distance[k] = new double[2];
+                for (int n = 0; n < numDrone; n++)
                 {
                     drone_distance[k][n] = HaversineDistance(drone_Lat[k], drone_Lng[k], marker_Lat[n], marker_Lng[n]);
                     richTextBox1.Text += drone_distance[k][n] + "\t";
@@ -232,13 +240,13 @@ namespace EUV.Views
 
             Munkres m = new Munkres(drone_distance);
 
-            bool success = m.Maximize();    // solve it (should return true)
+            bool success = m.Minimize();    // solve it (should return true)
             double[] solution = m.Solution; // Solution will be 0, 1, 2
             double minimumCost = m.Value;
 
             for (int i = 0; i < solution.Length; i++)
             {
-                richTextBox1.Text += drone_id[i] + ">>>>>" + marker_id[(int)solution[i]] + "\n";
+                richTextBox1.Text += "드론" + drone_id[i] + "번" + ">>>>>" + "마커" + marker_id[(int)solution[i]] + "번" + "\n";
             }
         }
 
@@ -247,9 +255,17 @@ namespace EUV.Views
         {
             Munkres m = new Munkres(drone_distance);
 
-            bool success = m.Maximize();    // solve it (should return true)
+            bool success = m.Minimize();    // solve it (should return true)
             double[] solution = m.Solution; // Solution will be 0, 1, 2
             double minimumCost = m.Value;
+
+            //0529 이나경
+            for (int k = 0; k < solution.Length; k++)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("marker_Lat[" + k + "]: " + marker_Lat[k]);
+                Console.WriteLine("marker_Lng[" + k + "]: " + marker_Lng[k]);
+            }
 
             for (int i = 0; i < solution.Length; i++)
             {
@@ -285,7 +301,7 @@ namespace EUV.Views
             var dLon = ToRadians(lon2 - lon1);
             var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
             var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            var d = R * c; // km 단위 거리
+            var d = R * c * 1000; // m 단위 거리
             return d;
         }
 
