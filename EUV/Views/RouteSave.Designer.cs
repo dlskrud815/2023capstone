@@ -38,7 +38,9 @@
             this.btnDown = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnUp = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnRouteSet = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.txtAllRouteSaveName = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.btnRouteSetDel = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.cboRoute2 = new System.Windows.Forms.ComboBox();
+            this.btnListViewDrop = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // txtRouteSaveName
@@ -48,7 +50,7 @@
             this.txtRouteSaveName.Depth = 0;
             this.txtRouteSaveName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.txtRouteSaveName.Hint = "";
-            this.txtRouteSaveName.Location = new System.Drawing.Point(27, 487);
+            this.txtRouteSaveName.Location = new System.Drawing.Point(27, 508);
             this.txtRouteSaveName.Margin = new System.Windows.Forms.Padding(4);
             this.txtRouteSaveName.MaxLength = 32767;
             this.txtRouteSaveName.MouseState = MaterialSkin.MouseState.HOVER;
@@ -70,7 +72,7 @@
             this.btnRouteDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRouteDelete.Depth = 0;
             this.btnRouteDelete.Icon = ((System.Drawing.Image)(resources.GetObject("btnRouteDelete.Icon")));
-            this.btnRouteDelete.Location = new System.Drawing.Point(344, 434);
+            this.btnRouteDelete.Location = new System.Drawing.Point(341, 451);
             this.btnRouteDelete.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnRouteDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRouteDelete.Name = "btnRouteDelete";
@@ -85,7 +87,7 @@
             this.btnRouteAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRouteAdd.Depth = 0;
             this.btnRouteAdd.Icon = ((System.Drawing.Image)(resources.GetObject("btnRouteAdd.Icon")));
-            this.btnRouteAdd.Location = new System.Drawing.Point(394, 434);
+            this.btnRouteAdd.Location = new System.Drawing.Point(391, 451);
             this.btnRouteAdd.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnRouteAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRouteAdd.Name = "btnRouteAdd";
@@ -109,7 +111,7 @@
             this.listView2.Location = new System.Drawing.Point(8, 70);
             this.listView2.Margin = new System.Windows.Forms.Padding(4);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(428, 361);
+            this.listView2.Size = new System.Drawing.Size(428, 369);
             this.listView2.TabIndex = 13;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -129,7 +131,7 @@
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDown.Depth = 0;
             this.btnDown.Icon = ((System.Drawing.Image)(resources.GetObject("btnDown.Icon")));
-            this.btnDown.Location = new System.Drawing.Point(16, 434);
+            this.btnDown.Location = new System.Drawing.Point(13, 452);
             this.btnDown.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnDown.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnDown.Name = "btnDown";
@@ -144,7 +146,7 @@
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUp.Depth = 0;
             this.btnUp.Icon = ((System.Drawing.Image)(resources.GetObject("btnUp.Icon")));
-            this.btnUp.Location = new System.Drawing.Point(66, 434);
+            this.btnUp.Location = new System.Drawing.Point(63, 453);
             this.btnUp.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.btnUp.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnUp.Name = "btnUp";
@@ -159,47 +161,69 @@
             this.btnRouteSet.Depth = 0;
             this.btnRouteSet.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
             this.btnRouteSet.Icon = null;
-            this.btnRouteSet.Location = new System.Drawing.Point(97, 606);
+            this.btnRouteSet.Location = new System.Drawing.Point(232, 608);
             this.btnRouteSet.Margin = new System.Windows.Forms.Padding(2);
             this.btnRouteSet.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRouteSet.Name = "btnRouteSet";
             this.btnRouteSet.Primary = true;
-            this.btnRouteSet.Size = new System.Drawing.Size(261, 42);
+            this.btnRouteSet.Size = new System.Drawing.Size(149, 42);
             this.btnRouteSet.TabIndex = 16;
             this.btnRouteSet.Text = "경로 저장";
             this.btnRouteSet.UseVisualStyleBackColor = true;
             this.btnRouteSet.Click += new System.EventHandler(this.btnRouteSet_Click);
             // 
-            // txtAllRouteSaveName
+            // btnRouteSetDel
             // 
-            this.txtAllRouteSaveName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnRouteSetDel.Depth = 0;
+            this.btnRouteSetDel.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
+            this.btnRouteSetDel.Icon = null;
+            this.btnRouteSetDel.Location = new System.Drawing.Point(63, 608);
+            this.btnRouteSetDel.Margin = new System.Windows.Forms.Padding(2);
+            this.btnRouteSetDel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnRouteSetDel.Name = "btnRouteSetDel";
+            this.btnRouteSetDel.Primary = true;
+            this.btnRouteSetDel.Size = new System.Drawing.Size(149, 42);
+            this.btnRouteSetDel.TabIndex = 18;
+            this.btnRouteSetDel.Text = "경로 삭제";
+            this.btnRouteSetDel.UseVisualStyleBackColor = true;
+            this.btnRouteSetDel.Click += new System.EventHandler(this.btnRouteSetDel_Click);
+            // 
+            // cboRoute2
+            // 
+            this.cboRoute2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAllRouteSaveName.Depth = 0;
-            this.txtAllRouteSaveName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.txtAllRouteSaveName.Hint = "";
-            this.txtAllRouteSaveName.Location = new System.Drawing.Point(27, 549);
-            this.txtAllRouteSaveName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtAllRouteSaveName.MaxLength = 32767;
-            this.txtAllRouteSaveName.MouseState = MaterialSkin.MouseState.HOVER;
-            this.txtAllRouteSaveName.Name = "txtAllRouteSaveName";
-            this.txtAllRouteSaveName.PasswordChar = '\0';
-            this.txtAllRouteSaveName.ReadOnly = false;
-            this.txtAllRouteSaveName.SelectedText = "";
-            this.txtAllRouteSaveName.SelectionLength = 0;
-            this.txtAllRouteSaveName.SelectionStart = 0;
-            this.txtAllRouteSaveName.Size = new System.Drawing.Size(389, 37);
-            this.txtAllRouteSaveName.TabIndex = 17;
-            this.txtAllRouteSaveName.TabStop = false;
-            this.txtAllRouteSaveName.Text = "- 저장 경로명 -";
-            this.txtAllRouteSaveName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtAllRouteSaveName.UseSystemPasswordChar = false;
+            this.cboRoute2.Font = new System.Drawing.Font("나눔스퀘어", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.cboRoute2.FormattingEnabled = true;
+            this.cboRoute2.Location = new System.Drawing.Point(27, 561);
+            this.cboRoute2.Name = "cboRoute2";
+            this.cboRoute2.Size = new System.Drawing.Size(389, 33);
+            this.cboRoute2.TabIndex = 19;
+            this.cboRoute2.Text = "- 저장 경로명 -";
+            // 
+            // btnListViewDrop
+            // 
+            this.btnListViewDrop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnListViewDrop.Depth = 0;
+            this.btnListViewDrop.Icon = ((System.Drawing.Image)(resources.GetObject("btnListViewDrop.Icon")));
+            this.btnListViewDrop.Location = new System.Drawing.Point(291, 451);
+            this.btnListViewDrop.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
+            this.btnListViewDrop.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnListViewDrop.Name = "btnListViewDrop";
+            this.btnListViewDrop.Primary = true;
+            this.btnListViewDrop.Size = new System.Drawing.Size(40, 40);
+            this.btnListViewDrop.TabIndex = 20;
+            this.btnListViewDrop.UseVisualStyleBackColor = true;
+            this.btnListViewDrop.Click += new System.EventHandler(this.btnListViewDrop_Click);
             // 
             // RouteSave
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 33F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(443, 672);
-            this.Controls.Add(this.txtAllRouteSaveName);
+            this.Controls.Add(this.btnListViewDrop);
+            this.Controls.Add(this.cboRoute2);
+            this.Controls.Add(this.btnRouteSetDel);
             this.Controls.Add(this.btnRouteSet);
             this.Controls.Add(this.btnDown);
             this.Controls.Add(this.btnUp);
@@ -220,7 +244,9 @@
             this.Controls.SetChildIndex(this.btnUp, 0);
             this.Controls.SetChildIndex(this.btnDown, 0);
             this.Controls.SetChildIndex(this.btnRouteSet, 0);
-            this.Controls.SetChildIndex(this.txtAllRouteSaveName, 0);
+            this.Controls.SetChildIndex(this.btnRouteSetDel, 0);
+            this.Controls.SetChildIndex(this.cboRoute2, 0);
+            this.Controls.SetChildIndex(this.btnListViewDrop, 0);
             this.ResumeLayout(false);
 
         }
@@ -235,7 +261,9 @@
         private MaterialSkin.Controls.MaterialFlatButton btnDown;
         private MaterialSkin.Controls.MaterialFlatButton btnUp;
         private MaterialSkin.Controls.MaterialRaisedButton btnRouteSet;
-        private MaterialSkin.Controls.MaterialSingleLineTextField txtAllRouteSaveName;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private MaterialSkin.Controls.MaterialRaisedButton btnRouteSetDel;
+        private System.Windows.Forms.ComboBox cboRoute2;
+        private MaterialSkin.Controls.MaterialFlatButton btnListViewDrop;
     }
 }

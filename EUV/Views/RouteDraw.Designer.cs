@@ -107,6 +107,7 @@
             this.btnSeeRoute.TabIndex = 10;
             this.btnSeeRoute.Text = "경로 보기";
             this.btnSeeRoute.UseVisualStyleBackColor = true;
+            this.btnSeeRoute.Click += new System.EventHandler(this.btnSeeRoute_Click);
             // 
             // drawSaveBtn
             // 

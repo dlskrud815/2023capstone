@@ -47,10 +47,10 @@ namespace EUV.Views
 
         private void btnRouteSet_Click(object sender, EventArgs e)
         {
-            if (txtAllRouteSaveName.Text != "" && txtAllRouteSaveName.Text != "- 저장 경로명 -")
+            if (cboRoute2.Text != "" && cboRoute2.Text != "- 저장 경로명 -")
             {
                 Console.WriteLine();
-                Console.WriteLine("RouteName: " + txtAllRouteSaveName.Text);
+                Console.WriteLine("RouteName: " + cboRoute2.Text);
 
                 markerLocationsList.Clear();
 
@@ -99,7 +99,7 @@ namespace EUV.Views
                 var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 var appSettings = configFile.AppSettings.Settings;
 
-                string key2 = "MarkerList-" + txtAllRouteSaveName.Text; // ex) MarkerList-경로확인1
+                string key2 = "MarkerList-" + cboRoute2.Text; // ex) MarkerList-경로확인1
 
                 List<string> routeCheck = new List<string>();// [[경로명, 인덱스], [,], []]
                 routeCheck.Clear();
@@ -119,7 +119,7 @@ namespace EUV.Views
                 ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
 
                 // txtAllRouteSaveName 텍스트 초기화
-                txtAllRouteSaveName.Text = "- 저장 경로명 -";
+                cboRoute2.Text = "- 저장 경로명 -";
             }
             else
             {
@@ -201,6 +201,32 @@ namespace EUV.Views
                     listView2.Items.Add(item);
 
                     index++;
+                }
+
+                if (cboRoute2.InvokeRequired)
+                {
+                    cboRoute2.Invoke(new Action(() =>
+                    {
+                        foreach (var key in appSettings.AllKeys)
+                        {
+                            if (key.StartsWith("MarkerList-"))
+                            {
+                                string routeName = key.Substring("MarkerList-".Length);
+                                cboRoute2.Items.Add(routeName);
+                            }
+                        }
+                    }));
+                }
+                else
+                {
+                    foreach (var key in appSettings.AllKeys)
+                    {
+                        if (key.StartsWith("MarkerList-"))
+                        {
+                            string routeName = key.Substring("MarkerList-".Length);
+                            cboRoute2.Items.Add(routeName);
+                        }
+                    }
                 }
             }
             catch (ConfigurationErrorsException)
@@ -367,6 +393,41 @@ namespace EUV.Views
             for (int i = 0; i < listView2.Items.Count; i++)
             {
                 listView2.Items[i].SubItems[1].Text = i.ToString();
+            }
+        }
+
+        private void btnRouteSetDel_Click(object sender, EventArgs e)
+        {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appSettings = configFile.AppSettings.Settings;
+
+            string name1 = "MarkerLocations-" + cboRoute2.SelectedItem.ToString();
+            string name2 = "MarkerList-" + cboRoute2.SelectedItem.ToString();
+
+            string key1 = appSettings.AllKeys.FirstOrDefault(k => k.EndsWith(name1));
+            string key2 = appSettings.AllKeys.FirstOrDefault(k => k.EndsWith(name2));
+
+            // 해당 name을 가진 항목 제거
+            if (key1 != null || key2 != null)
+            {
+                appSettings.Remove(key1);
+                appSettings.Remove(key2);
+            }
+
+            configFile.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+
+            cboRoute2.Text = "- 저장 경로명 -";
+        }
+
+        private void btnListViewDrop_Click(object sender, EventArgs e)
+        {
+            if (listView2.SelectedItems.Count == 0)
+                return;
+
+            foreach (ListViewItem item in listView2.SelectedItems)
+            {
+                item.Remove();
             }
         }
     }

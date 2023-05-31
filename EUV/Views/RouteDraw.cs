@@ -841,7 +841,7 @@ namespace EUV.Views
             Console.WriteLine("다각형의 꼭짓점 개수: " + string.Join(", ", vertexCounts));
 
             // 꼭짓점 개수가 마커 개수보다 작을 경우 안내 메시지 표시
-            if (vertexCounts.Sum() > maxMarkerCount)
+            if (vertexCounts.Sum() < maxMarkerCount)
             {
                 MessageBox.Show("마커 개수가 다각형의 꼭짓점 개수보다 작습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -973,6 +973,18 @@ namespace EUV.Views
         private static double ToRadians(double degrees)
         {
             return degrees * Math.PI / 180;
+        }
+
+        private void btnSeeRoute_Click(object sender, EventArgs e)
+        {
+            if (cboRoute.SelectedIndex == -1)
+            {
+                MessageBox.Show("경로를 선택해주세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+
+            }
         }
     }
 }
