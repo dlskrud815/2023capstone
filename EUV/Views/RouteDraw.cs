@@ -1,4 +1,5 @@
-﻿using EUV.Utility;
+﻿using EUV.Messages;
+using EUV.Utility;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.ObjectModel;
@@ -52,7 +53,7 @@ namespace EUV.Views
         double grid_width;
 
         private bool draw_marker;
-        private int marker_num;
+        public int marker_num;
         GMarkerGoogle marker;
         // 리스트 생성
         private List<PointLatLng> markerLocations = new List<PointLatLng>();
@@ -70,10 +71,20 @@ namespace EUV.Views
         private PolygonSelector polygonSelector;
 
         // 마커 그리기
-        private GMapOverlay markersOverlay;
-        private int markerCount;
-        private int maxMarkerCount;
-        private bool enableMarkerCreation;
+        public GMapOverlay markersOverlay;
+        public int markerCount;
+        public int maxMarkerCount;
+        public bool enableMarkerCreation;
+
+        public double[] drone_Lng;
+        public double[] drone_Lat;
+        public string[] drone_id;
+
+        public GMapOverlay markerOverlay;
+
+        public int droneIndex; // 드론 인덱스 변수 추가
+                               //int numDrone = int.Parse(droneNum.Text);
+        public int numDrone;
 
         #endregion
 
@@ -129,10 +140,66 @@ namespace EUV.Views
 
             draw_marker = false;
 
-            marker_num = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            //marker_num = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            marker_num = int.Parse(numTest.Text);  //06-01
+
             Console.WriteLine("선택 드론 갯수: " + marker_num.ToString());
             //선택 드론 갯수
 
+            //드론 위치
+            GMapOverlay markerOverlay = new GMapOverlay("markers");
+
+            droneIndex = 0; // 드론 인덱스 변수 추가
+            //numDrone = int.Parse(droneNum.Text);
+            numDrone = marker_num;
+
+            /*
+            drone_id = new string[numDrone];
+            drone_Lng = new double[numDrone];
+            drone_Lat = new double[numDrone];
+            */
+
+            // 임시
+            drone_id = new string[] { "1", "2", "3" };
+            drone_Lng = new double[] { 129.3763008713, 129.3762552738, 129.3763116002 };
+            drone_Lat = new double[] { 35.60858396839, 35.60860141376, 35.60863848518 };
+
+            /*
+            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
+            {
+                string select = vm.selected.ToString();
+                string id = vm.id.ToString();
+                double lat = vm.gps_c_lat;
+                double lng = vm.gps_c_lng;
+
+                if (droneIndex < numDrone)
+                {
+                    drone_id[droneIndex] = id;
+                    drone_Lat[droneIndex] = lat;
+                    drone_Lng[droneIndex] = lng;
+                    Console.WriteLine(drone_id[droneIndex]);
+                    Console.WriteLine(drone_Lat[droneIndex]);
+                    Console.WriteLine(drone_Lng[droneIndex]);
+                    droneIndex++;
+                }
+            }));
+            */
+
+            // 드론 좌표값 가져와서 마커 생성 및 RouteMap에 추가
+            for (int i = 0; i < numDrone; i++)
+            {
+                double lat = drone_Lat[i];
+                double lng = drone_Lng[i];
+                string id = drone_id[i];
+
+                GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.green_dot);
+                marker.Tag = id; // 마커의 Tag 속성에 드론의 ID 값을 저장
+
+                markerOverlay.Markers.Add(marker);
+            }
+
+            RouteMap.Overlays.Add(markerOverlay);
+            RouteMap.Refresh();
         }
 
         private void RouteMapInitializing()
@@ -358,7 +425,8 @@ namespace EUV.Views
 
         private void btnNodeSelect_Click(object sender, EventArgs e)
         {
-            maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            //maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            maxMarkerCount = marker_num;
 
             // 지도 클릭 이벤트 등록
             RouteMap.MouseUp -= RouteMap_MouseUp; // 두 번씩 클릭 이벤트 발생하는 거 해결
@@ -369,44 +437,6 @@ namespace EUV.Views
 
             // 마커 생성 활성
             enableMarkerCreation = true;
-        }
-
-        private void RouteMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                PointLatLng point = RouteMap.FromLocalToLatLng(e.X, e.Y);
-
-                ContextMenu menu = new ContextMenu();
-                MenuItem deleteItem = new MenuItem("Delete Marker");
-                deleteItem.Click += new EventHandler(deleteItem_Click);
-                menu.MenuItems.Add(deleteItem);
-
-                RouteMap.ContextMenu = menu;
-                RouteMap.ContextMenu.Show(RouteMap, new System.Drawing.Point(e.X, e.Y));
-            }
-        }
-        private void deleteItem_Click(object sender, EventArgs e)
-        {
-            GMapOverlay markersOverlay = RouteMap.Overlays.FirstOrDefault(x => x.Id == "markers");
-            if (markersOverlay != null)
-            {
-                GMapMarker clickedMarker = markersOverlay.Markers.FirstOrDefault(x => x.IsMouseOver);
-                if (clickedMarker != null)
-                {
-                    markersOverlay.Markers.Remove(clickedMarker);
-                    RouteMap.Update();
-                    markerCount = markersOverlay.Markers.Count;
-
-                    // 마커 생성 버튼과 지도 클릭 이벤트 상태 조정
-                    if (markerCount < maxMarkerCount)
-                    {
-                        RouteMap.MouseUp += RouteMap_MouseUp;
-                        btnNodeSelect.Enabled = true;
-                        enableMarkerCreation = true;
-                    }
-                }
-            }
         }
 
 
@@ -484,12 +514,12 @@ namespace EUV.Views
                 }
             }
 
-            routeSave = new RouteSave
+            routeSave = new RouteSave(this)
             {
                 Owner = this
             };
 
-            routeSave.SetNumTestValue(droneNum.Text); // ******************** 이나경 05-22
+            routeSave.SetNumTestValue(marker_num.ToString()); // ******************** 이나경 05-22
             routeSave.SetMarkerLocations(markerLocations);
             routeSave.Show();
         }
@@ -522,6 +552,7 @@ namespace EUV.Views
 
         public void LoadConfiguration()
         {
+            cboRoute.Items.Clear();
             try
             {
                 var appSettings = ConfigurationManager.AppSettings;
@@ -663,7 +694,7 @@ namespace EUV.Views
             {
                 pointIndexCheck++;
 
-                if(pointIndexCheck%2 == 1)
+                if (pointIndexCheck % 2 == 1)
                 {
                     numCheck++;
 
@@ -699,7 +730,7 @@ namespace EUV.Views
             }
 
             string savePoints = string.Join(";", pointStrings);
-            string numPoints = string.Join(";", pointNumStrings); 
+            string numPoints = string.Join(";", pointNumStrings);
             //ex) 삼각형1 사각형1을 그렸을 경우, [도형 갯수, 도형1 꼭짓점 갯수, 도형2 꼭짓점 갯수] -> [2,3,4]로 표시
 
             Console.WriteLine("포인트리스트: " + savePoints + "다각형 갯수: " + numPoints);
@@ -728,6 +759,17 @@ namespace EUV.Views
 
                 // txtRouteSaveName 텍스트 초기화
                 cboPoly.Text = "- 저장 다각형 -";
+
+                // 콤보박스 항목을 갱신합니다.
+                cboPoly.Items.Clear();
+                foreach (var key in appSettings.AllKeys)
+                {
+                    if (key.StartsWith("PolygonPoint-"))
+                    {
+                        string routeName = key.Substring("PolygonPoint-".Length);
+                        cboPoly.Items.Add(routeName);
+                    }
+                }
             }
             else
             {
@@ -780,14 +822,14 @@ namespace EUV.Views
 
             this.polygonList.Clear();
 
-            for (int i=1; i<polyCheck.Count(); i++)
-            { 
+            for (int i = 1; i < polyCheck.Count(); i++)
+            {
                 int drawPointNum = polyCheck[i];
                 //this.polygonList.Add(e.PointList.ToArray());
                 this.polygonList.Add(pointList.GetRange(indexCheck, drawPointNum).ToArray());
                 indexCheck += drawPointNum;
             }
-            
+
             this.RouteMap.Paint += RouteMap_Paint;
         }
 
@@ -813,6 +855,17 @@ namespace EUV.Views
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
 
             cboPoly.Text = "- 저장 다각형 -";
+
+            // 콤보박스 항목을 갱신합니다.
+            cboPoly.Items.Clear();
+            foreach (var key in appSettings.AllKeys)
+            {
+                if (key.StartsWith("PolygonPoint-"))
+                {
+                    string routeName = key.Substring("PolygonPoint-".Length);
+                    cboPoly.Items.Add(routeName);
+                }
+            }
         }
 
         private void btnAutoSelect_Click(object sender, EventArgs e)
@@ -834,14 +887,15 @@ namespace EUV.Views
             List<int> vertexCounts = distinctPolygons.Select(polygon => polygon.Length).ToList();
 
             // 마커 개수 확인
-            maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            //maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            maxMarkerCount = marker_num;
 
             // 다각형의 개수와 각 다각형의 꼭짓점 개수 출력
             Console.WriteLine("다각형 개수: " + polygonCount);
             Console.WriteLine("다각형의 꼭짓점 개수: " + string.Join(", ", vertexCounts));
 
             // 꼭짓점 개수가 마커 개수보다 작을 경우 안내 메시지 표시
-            if (vertexCounts.Sum() < maxMarkerCount)
+            if (vertexCounts.Sum() > maxMarkerCount)
             {
                 MessageBox.Show("마커 개수가 다각형의 꼭짓점 개수보다 작습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -867,73 +921,27 @@ namespace EUV.Views
                 int remainingMarkers = Math.Max(0, maxMarkerCount - totalMarkersNeeded);
 
                 // Create markers maintaining minimum distance between them
-                markerLocations = new List<PointLatLng>();
+                //markerLocations = new List<PointLatLng>();
 
-                // Distribute the remaining markers evenly within the lines
-                if (remainingMarkers > 0 && polygonCount >= 1)
+                // Distribute the remaining markers evenly within the line
+                if (remainingMarkers > 0 && polygonCount == 1 && vertexCounts[0] == 2)
                 {
-                    int markersPerLine = remainingMarkers / polygonCount; // 각 직선당 배치할 마커 개수
-                    int remainingMarkersPerLine = remainingMarkers % polygonCount; // 남은 마커를 균등하게 배치할 직선 개수
+                    PointLatLng startPoint = RouteMap.FromLocalToLatLng(distinctPolygons[0][0].X, distinctPolygons[0][0].Y);
+                    PointLatLng endPoint = RouteMap.FromLocalToLatLng(distinctPolygons[0][1].X, distinctPolygons[0][1].Y);
+                    double distance = GetDistance(startPoint, endPoint);
+                    double interval = distance / (remainingMarkers + 1);
 
-                    int currentMarkersPerLine = markersPerLine + (remainingMarkersPerLine > 0 ? 1 : 0); // 현재 직선에 배치할 마커 개수
-
-                    foreach (var polygon in distinctPolygons)
+                    for (int i = 1; i <= remainingMarkers; i++)
                     {
-                        int vertexCount = polygon.Length;
+                        double ratio = i * interval / distance;
 
-                        PointLatLng startPoint = RouteMap.FromLocalToLatLng(polygon[0].X, polygon[0].Y);
-                        PointLatLng endPoint = RouteMap.FromLocalToLatLng(polygon[vertexCount - 1].X, polygon[vertexCount - 1].Y);
-                        double distance = GetDistance(startPoint, endPoint);
+                        double latitude = startPoint.Lat + (endPoint.Lat - startPoint.Lat) * ratio;
+                        double longitude = startPoint.Lng + (endPoint.Lng - startPoint.Lng) * ratio;
 
-                        int markersToDistribute = currentMarkersPerLine; // 현재 직선에 배치할 마커 개수
-
-                        for (int i = 1; i < vertexCount; i++)
-                        {
-                            if (markersToDistribute <= 0)
-                                break;
-
-                            PointLatLng currentVertex = RouteMap.FromLocalToLatLng(polygon[i].X, polygon[i].Y);
-                            PointLatLng nextVertex = RouteMap.FromLocalToLatLng(polygon[(i + 1) % vertexCount].X, polygon[(i + 1) % vertexCount].Y);
-
-                            double segmentDistance = GetDistance(currentVertex, nextVertex);
-                            double segmentInterval = segmentDistance / (markersToDistribute + 1); // 현재 직선 내에서 마커 간격 계산
-
-                            // Create markers between current and next vertices with minimum distance
-                            for (int j = 1; j <= markersToDistribute; j++)
-                            {
-                                double ratio = j * segmentInterval / segmentDistance; // 간격 비율 계산
-
-                                double latitude = currentVertex.Lat + (nextVertex.Lat - currentVertex.Lat) * ratio;
-                                double longitude = currentVertex.Lng + (nextVertex.Lng - currentVertex.Lng) * ratio;
-
-                                PointLatLng markerLocation = new PointLatLng(latitude, longitude);
-
-                                // 중복 체크
-                                bool isDuplicate = markerLocations.Any(existingMarkerLocation =>
-                                    Math.Abs(existingMarkerLocation.Lat - markerLocation.Lat) < 1e-6 &&
-                                    Math.Abs(existingMarkerLocation.Lng - markerLocation.Lng) < 1e-6);
-
-                                if (!isDuplicate)
-                                {
-                                    GMarkerGoogle marker = new GMarkerGoogle(markerLocation, GMarkerGoogleType.blue);
-                                    markersOverlay.Markers.Add(marker);
-                                    markerLocations.Add(markerLocation);
-
-                                    markersToDistribute--;
-
-                                    if (markersOverlay.Markers.Count >= maxMarkerCount)
-                                    {
-                                        RouteMap.MouseUp -= RouteMap_MouseUp;
-                                        btnNodeSelect.Enabled = false;
-                                        enableMarkerCreation = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        currentMarkersPerLine = markersPerLine; // 다음 직선에 배치할 마커 개수
-                        remainingMarkersPerLine--; // 남은 직선 개수 감소
+                        PointLatLng markerLocation = new PointLatLng(latitude, longitude);
+                        GMarkerGoogle marker = new GMarkerGoogle(markerLocation, GMarkerGoogleType.red);
+                        markersOverlay.Markers.Add(marker);
+                        markerLocations.Add(markerLocation);
                     }
                 }
 
@@ -942,7 +950,6 @@ namespace EUV.Views
                 {
                     RouteMap.MouseUp -= RouteMap_MouseUp;
                     btnNodeSelect.Enabled = false;
-                    btnAutoSelect.Enabled = false;
                     enableMarkerCreation = false;
                 }
             }
@@ -983,8 +990,96 @@ namespace EUV.Views
             }
             else
             {
+                this.polygonList.Clear();
+                this.RouteMap.Invalidate(); // 지운 후, 지도를 다시 그려줍니다.
 
+                foreach (var list in markersList)
+                {
+                    List<DrawingPoint> localPoints = new List<DrawingPoint>();
+
+                    foreach (var point in list)
+                    {   
+                        //Console.WriteLine(RouteMap.FromLatLngToLocal(point));
+                        GPoint localPoint = RouteMap.FromLatLngToLocal(point);
+
+                        int lat = (int)localPoint.X;
+                        int lng = (int)localPoint.Y;
+
+                        DrawingPoint point1 = new DrawingPoint(lat, lng);
+
+                        // 전역 좌표를 로컬 좌표로 변환하여 localPoints에 추가합니다.
+                        localPoints.Add(point1);
+                    }
+
+                    // 로컬 좌표로 변환된 localPoints를 polygonList에 추가합니다.
+                    polygonList.Add(localPoints.ToArray());
+                }
+                this.RouteMap.Paint += RouteMap_Paint;
             }
         }
+
+        private void RouteMap_OnMarkerEnter(GMapMarker item)
+        {
+            // 마우스 호버 시 드론 ID 표시
+            if (item.Tag != null)
+            {
+                string droneId = item.Tag.ToString();
+                item.ToolTipText = "드론 ID: " + droneId;
+                item.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                item.ToolTip.Fill = Brushes.White;
+                item.ToolTip.Foreground = Brushes.Black;
+            }
+        }
+
+        private void RouteMap_Click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && drawPolygonCheckBox.Checked == false)
+            {
+                ContextMenu menu = new ContextMenu();
+                MenuItem deleteItem = new MenuItem("Delete All Markers");
+                deleteItem.Click += new EventHandler(deleteItem_Click);
+                menu.MenuItems.Add(deleteItem);
+
+                RouteMap.ContextMenu = menu;
+                RouteMap.ContextMenu.Show(RouteMap, new System.Drawing.Point(e.X, e.Y));
+            }
+        }
+
+        private void deleteItem_Click(object sender, EventArgs e)
+        {
+            markersOverlay.Markers.Clear();
+            RouteMap.Refresh();
+
+            markerCount = markersOverlay.Markers.Count;
+
+            btnNodeSelect.Enabled = true;
+            enableMarkerCreation = true;
+        }
+
+        private void RouteMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ContextMenu menu = new ContextMenu();
+                MenuItem deleteItem = new MenuItem("Delete Marker");
+                deleteItem.Click += (sender, args) =>
+                {
+                    markersOverlay.Markers.Remove(item);
+                    RouteMap.Refresh();
+                    markerCount = markersOverlay.Markers.Count;
+
+                    if (markerCount < maxMarkerCount)
+                    {
+                        btnNodeSelect.Enabled = true;
+                        enableMarkerCreation = true;
+                    }
+                };
+                menu.MenuItems.Add(deleteItem);
+
+                RouteMap.ContextMenu = menu;
+                RouteMap.ContextMenu.Show(RouteMap, new System.Drawing.Point(e.X, e.Y));
+            }
+        }
+
     }
 }

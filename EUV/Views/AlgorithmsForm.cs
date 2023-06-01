@@ -95,33 +95,6 @@ namespace EUV.Views
                 numDrone = droneList.Count;
             }
 
-            // MainForm의 인스턴스를 통해 값을 가져옴
-            List<string> algo_ids = mainForm.ids_forCheck;
-            List<string> algo_gpsValues = mainForm.gpsValues_forCheck;
-
-            Console.WriteLine();
-            Console.WriteLine("경로 개수: " + droneLocationsList.Count);
-
-            Console.WriteLine("리스트 확인 : 개수: " + algo_ids.Count); ////******************************* 이나경 05-22 algo_ids.Count 뽑아쓰면 될 듯
-
-            // 결과 출력
-            for (int i = 0; i < algo_ids.Count && i < algo_gpsValues.Count; i++)
-            {
-                Console.WriteLine($"algo_ids: {algo_ids[i]}, algo_gpsValues: {algo_gpsValues[i]}");
-            }
-
-
-            Console.WriteLine();
-            foreach (var locations in droneLocationsList)
-            {
-                Console.WriteLine();
-                foreach (var location in locations)
-                {
-                    Console.WriteLine("위도: {0}, 경도: {1}", location.Lat, location.Lng);
-                }
-            }
-            // ******* 이나경
-
             drone_id = new string[numDrone];
             marker_id = new string[numDrone];
 
@@ -132,49 +105,6 @@ namespace EUV.Views
 
             drone_Lng = new double[numDrone]; // ******* 이나경 
             drone_Lat = new double[numDrone]; //
-
-            /*
-            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
-            {
-                string select = vm.selected.ToString();
-                string id = vm.id.ToString();
-                double lat = vm.gps_c_lat;
-                double lng = vm.gps_c_lng;
-
-                for (int i = 0; i < 2; i++)
-                {
-                    drone_id[i] = id;
-                    drone_Lat[i] = lat;
-                    drone_Lng[i] = lng;
-                    Console.WriteLine(drone_id[i]);
-                    Console.WriteLine(drone_Lat[i]);
-                    Console.WriteLine(drone_Lng[i]);
-                }
-            }));
-            */
-
-            /*
-            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
-            {
-                int cnt1 = 0;
-
-                string select = vm.selected.ToString();
-                string id = vm.id.ToString();
-                double lat = vm.gps_c_lat;
-                double lng = vm.gps_c_lng;
-
-                int i = cnt1;
-
-                drone_id[i] = id;
-                drone_Lat[i] = lat;
-                drone_Lng[i] = lng;
-                Console.WriteLine(drone_id[i]);
-                Console.WriteLine(drone_Lat[i]);
-                Console.WriteLine(drone_Lng[i]);
-
-                cnt1++;
-            }));
-            */
 
             int droneIndex = 0; // 드론 인덱스 변수 추가
 
@@ -212,31 +142,9 @@ namespace EUV.Views
                 }
             }
 
-            /*
-            foreach (var locations in droneLocationsList)
-            {
-                foreach (var location in locations)
-                {
-                    int j = cnt2;
-                    marker_id[j] = j.ToString();
-                    marker_Lat[j] = location.Lat;
-                    marker_Lng[j] = location.Lng;
-                    Console.WriteLine(marker_Lat[j]);
-
-                    cnt2++;
-                }
-            }
-            */
-            /* 버려
-            double[][] drone_distance = new double[2][];
-            for (int i = 0; i < 2; i++)
-            {
-                drone_distance[i] = new double[2];
-            }
-            */
-
 
             // drone_distance 배열 초기화
+            /*
             drone_distance = new double[numDrone][];
             for (int i = 0; i < numDrone; i++)
             {
@@ -253,6 +161,10 @@ namespace EUV.Views
                 }
                 richTextBox1.Text += "\n";
             }
+            */
+
+            // 서지훈 0531
+            drone_distance_func();
 
             // 서지훈 0531
             double[] sol = shortest_path_algorithm(drone_distance);
@@ -263,9 +175,57 @@ namespace EUV.Views
             }
 
         }
+        // 서지훈 0531
+        public void drone_distance_func()
+        {
+            drone_distance = new double[numDrone][];
+            for (int i = 0; i < numDrone; i++)
+            {
+                drone_distance[i] = new double[numDrone];
+            }
+            for (int i = 0; i < numDrone; i++)
+            {
+                for (int j = 0; j < numDrone; j++)
+                {
+                    drone_distance[i][j] = HaversineDistance(drone_Lat[i], drone_Lng[i], marker_Lat[j], marker_Lng[j]);
+                    richTextBox1.Text += drone_distance[i][j] + "\t";
+                }
+                richTextBox1.Text += "\n";
+            }
+        }
 
         private System.Threading.Timer timer; //타이머 변수
         private void btnDroneMove_Click(object sender, EventArgs e)
+        {
+            /*
+            double[] sol = shortest_path_algorithm(drone_distance);
+
+            for (int i = 0; i < sol.Length; i++)
+            {
+                string paramJson = string.Format("{{'LAT':'{0}','LNG':{1},'ALT':{2}}}", marker_Lat[(int)sol[i]], marker_Lng[(int)sol[i]], "0");
+
+                SendMessage cmdMessage = new SendMessage
+                {
+                    id = int.Parse(drone_id[i]),
+                    cmd = "GOHERE",
+                    param = paramJson
+                };
+                string jstr = JsonSerializer.Serialize(cmdMessage);
+                int result = TcpSocket._getInstance()._sendmessage(jstr, int.Parse(drone_id[i]));
+
+                if (result == -1)
+                {
+                    removeVehicle(cmdMessage.id);
+                }
+
+                timer = new System.Threading.Timer(TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            }
+            */
+            drone_Move();
+        }
+
+        // 서지훈 0531 드론 gohere 함수 추가
+        public void drone_Move()
         {
             double[] sol = shortest_path_algorithm(drone_distance);
 
@@ -290,8 +250,9 @@ namespace EUV.Views
                 timer = new System.Threading.Timer(TimerCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
             }
         }
+
         //서지훈 0531 드론 모드 추가
-        public Parameter parameter;
+        //public Parameter parameter;
         public string[] drone_mode;
         //추가
         private void TimerCallback(object state)
@@ -332,10 +293,56 @@ namespace EUV.Views
 
                 if (drone_mode[i] == "LOITER")
                 {
+                    DialogResult result = MessageBox.Show("다음 시나리오를 실행하시겠습니까?", "Confirmation", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        // User clicked Yes
+                        Array.Resize(ref marker_Lat, marker_Lat.Length - numDrone); // 드론 갯수 만큼 인덱스 요소 삭제
+                        Array.Resize(ref marker_Lng, marker_Lat.Length - numDrone);
+                        next_scenario();
+                    }
+                    else if (result == DialogResult.No)
+                    {
+                        // User clicked No
+                    }
                     timer.Change(Timeout.Infinite, Timeout.Infinite); // 타이머 멈춤
                 }
             }
         }
+
+        private void next_scenario()
+        {
+            int droneIndex = 0; // 드론 인덱스 변수 추가
+
+            drone_Lng = new double[numDrone];
+            drone_Lat = new double[numDrone];
+            drone_mode = new string[numDrone];
+
+            AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
+            {
+                string select = vm.selected.ToString();
+                string id = vm.id.ToString();
+                double lat = vm.gps_c_lat;
+                double lng = vm.gps_c_lng;
+                string mode = vm.mode.Replace("VehicleMode:", "");
+
+                if (droneIndex < numDrone)
+                {
+                    drone_mode[droneIndex] = mode;
+                    drone_id[droneIndex] = id;
+                    drone_Lat[droneIndex] = lat;
+                    drone_Lng[droneIndex] = lng;
+                    droneIndex++;
+                }
+            }));
+
+            drone_distance_func();
+
+            drone_Move();
+
+        }
+
+
         //추가
         public double[] shortest_path_algorithm(double[][] drone_distance)
         {
@@ -353,6 +360,7 @@ namespace EUV.Views
             if (index >= 0)
                 AllAboutMessages._getInstance().VehicleMessages.RemoveAt(index);
         }
+
         public static double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
         {
             var R = 6371; //지구 반지름 (km)
@@ -363,6 +371,7 @@ namespace EUV.Views
             var d = R * c * 1000; // m 단위 거리
             return d;
         }
+
         private static double ToRadians(double angle)
         {
             return Math.PI * angle / 180.0;

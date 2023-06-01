@@ -327,10 +327,11 @@
             this.numTest.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
             this.numTest.Location = new System.Drawing.Point(776, 14);
             this.numTest.Name = "numTest";
-            this.numTest.Size = new System.Drawing.Size(34, 22);
+            this.numTest.Size = new System.Drawing.Size(22, 22);
             this.numTest.TabIndex = 22;
-            this.numTest.Text = "12";
+            this.numTest.Text = "3";
             this.numTest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.numTest.Visible = false;
             // 
             // grpDraw
             // 
@@ -445,8 +446,10 @@
             this.RouteMap.TabIndex = 0;
             this.RouteMap.Zoom = 0D;
             this.RouteMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.RouteMap_OnMarkerClick);
+            this.RouteMap.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.RouteMap_OnMarkerEnter);
             this.RouteMap.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.RouteMap_OnMapZoomChanged);
             this.RouteMap.Paint += new System.Windows.Forms.PaintEventHandler(this.RouteMap_Paint);
+            this.RouteMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.RouteMap_Click);
             this.RouteMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RouteMap_MouseUp);
             // 
             // RouteDraw

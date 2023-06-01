@@ -24,26 +24,46 @@ namespace EUV.Views
 
         private string droneNum;
 
+        private RouteDraw routeDrawForm;
+
         public void SetNumTestValue(string value)
         {
             droneNum = value;
         }
 
-        public RouteSave()
+        public RouteSave(RouteDraw routeDrawForm)
         {
             InitializeComponent();
             LoadConfiguration();
+
+            this.routeDrawForm = routeDrawForm;
         }
 
         private void RouteSave_Load(object sender, EventArgs e)
         {
+            // 기존 항목 초기화
+            cboRoute2.Items.Clear();
+
             LoadConfiguration();
         }
+
 
         public void SetMarkerLocations(List<PointLatLng> locations)
         {
             markerLocations = locations;
         }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+
+            // RouteDraw 폼이 아직 열려있고 파기되지 않았는지 확인한 후 다시 로드합니다
+            if (routeDrawForm != null && !routeDrawForm.IsDisposed)
+            {
+                routeDrawForm.LoadConfiguration();
+            }
+        }
+
 
         private void btnRouteSet_Click(object sender, EventArgs e)
         {
@@ -120,6 +140,17 @@ namespace EUV.Views
 
                 // txtAllRouteSaveName 텍스트 초기화
                 cboRoute2.Text = "- 저장 경로명 -";
+
+                // 콤보박스 항목을 갱신합니다.
+                cboRoute2.Items.Clear();
+                foreach (var key in appSettings.AllKeys)
+                {
+                    if (key.StartsWith("MarkerList-"))
+                    {
+                        string routeName = key.Substring("MarkerList-".Length);
+                        cboRoute2.Items.Add(routeName);
+                    }
+                }
             }
             else
             {
@@ -418,6 +449,17 @@ namespace EUV.Views
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
 
             cboRoute2.Text = "- 저장 경로명 -";
+
+            // 콤보박스 항목을 갱신합니다.
+            cboRoute2.Items.Clear();
+            foreach (var key in appSettings.AllKeys)
+            {
+                if (key.StartsWith("MarkerList-"))
+                {
+                    string routeName = key.Substring("MarkerList-".Length);
+                    cboRoute2.Items.Add(routeName);
+                }
+            }
         }
 
         private void btnListViewDrop_Click(object sender, EventArgs e)

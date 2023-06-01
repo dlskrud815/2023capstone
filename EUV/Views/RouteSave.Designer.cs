@@ -119,7 +119,7 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "경로 시나리오명";
-            this.columnHeader2.Width = 200;
+            this.columnHeader2.Width = 320;
             // 
             // columnHeader1
             // 
