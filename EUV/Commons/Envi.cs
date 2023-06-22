@@ -9,7 +9,7 @@ namespace EUV.Commons
     class Envi
     {
         #region 소켓 변수
-        public static readonly string _IPAddress = "192.168.117.106";//"192.168.88.26";//"10.8.0.10";//"192.168.255.253";//"192.168.88.42";   //"192.168.0.6";
+        public static readonly string _IPAddress = "192.168.118.106";
         public static readonly int _SocketPort = 9000;
         #endregion
 
@@ -66,3 +66,7 @@ namespace EUV.Commons
         #endregion
     }
 }
+
+
+
+//"192.168.88.26";//"10.8.0.10";//"192.168.255.253";//"192.168.88.42";   //"192.168.0.6";

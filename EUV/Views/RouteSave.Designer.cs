@@ -235,7 +235,7 @@
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "RouteSave";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "경로 저장";
+            this.Text = "경로 매니저";
             this.Load += new System.EventHandler(this.RouteSave_Load);
             this.Controls.SetChildIndex(this.txtRouteSaveName, 0);
             this.Controls.SetChildIndex(this.btnRouteAdd, 0);

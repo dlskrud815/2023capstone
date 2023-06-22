@@ -327,9 +327,9 @@
             this.numTest.Font = new System.Drawing.Font("나눔스퀘어", 9.999999F);
             this.numTest.Location = new System.Drawing.Point(776, 14);
             this.numTest.Name = "numTest";
-            this.numTest.Size = new System.Drawing.Size(22, 22);
+            this.numTest.Size = new System.Drawing.Size(34, 22);
             this.numTest.TabIndex = 22;
-            this.numTest.Text = "3";
+            this.numTest.Text = "10";
             this.numTest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.numTest.Visible = false;
             // 
@@ -462,7 +462,7 @@
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "RouteDraw";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "경로 그리기";
+            this.Text = "경로 에디터";
             this.Load += new System.EventHandler(this.RouteDraw_Load);
             this.Controls.SetChildIndex(this.tableLayoutPanel3, 0);
             this.grpSave.ResumeLayout(false);

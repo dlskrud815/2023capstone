@@ -56,7 +56,7 @@ namespace EUV.Views
         public int marker_num;
         GMarkerGoogle marker;
         // 리스트 생성
-        private List<PointLatLng> markerLocations = new List<PointLatLng>();
+        public List<PointLatLng> markerLocations = new List<PointLatLng>();
 
         private int forCheck = 0;
         // 그리기
@@ -64,7 +64,7 @@ namespace EUV.Views
 
         /// 다각형 리스트
         //private List<Point[]> polygonList = new List<Point[]>();
-        private List<DrawingPoint[]> polygonList = new List<DrawingPoint[]>();
+        public List<DrawingPoint[]> polygonList = new List<DrawingPoint[]>();
 
 
         /// 다각형 선택자
@@ -140,8 +140,9 @@ namespace EUV.Views
 
             draw_marker = false;
 
-            //marker_num = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
-            marker_num = int.Parse(numTest.Text);  //06-01
+            marker_num = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            //marker_num = int.Parse(numTest.Text);  //06-01
+            //droneNum.Text = numTest.Text; //0617
 
             Console.WriteLine("선택 드론 갯수: " + marker_num.ToString());
             //선택 드론 갯수
@@ -153,18 +154,20 @@ namespace EUV.Views
             //numDrone = int.Parse(droneNum.Text);
             numDrone = marker_num;
 
-            /*
+            ///*
             drone_id = new string[numDrone];
             drone_Lng = new double[numDrone];
             drone_Lat = new double[numDrone];
-            */
-
-            // 임시
-            drone_id = new string[] { "1", "2", "3" };
-            drone_Lng = new double[] { 129.3763008713, 129.3762552738, 129.3763116002 };
-            drone_Lat = new double[] { 35.60858396839, 35.60860141376, 35.60863848518 };
+            //*/
 
             /*
+            // 임시
+            drone_id = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+            drone_Lng = new double[] { 129.376245, 129.376287, 129.376323, 129.376189, 129.376219, 129.376262, 129.376311, 129.376358, 129.376226, 129.376283 };
+            drone_Lat = new double[] { 35.608541, 35.608547, 35.608549, 35.608567, 35.608569, 35.608572, 35.608573, 35.608571, 35.608606, 35.608606 };
+            */
+
+            ///*
             AllAboutMessages._getInstance().VehicleMessages.ToList().ForEach((vm =>
             {
                 string select = vm.selected.ToString();
@@ -183,7 +186,7 @@ namespace EUV.Views
                     droneIndex++;
                 }
             }));
-            */
+            //*/
 
             // 드론 좌표값 가져와서 마커 생성 및 RouteMap에 추가
             for (int i = 0; i < numDrone; i++)
@@ -425,8 +428,9 @@ namespace EUV.Views
 
         private void btnNodeSelect_Click(object sender, EventArgs e)
         {
-            //maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
-            maxMarkerCount = marker_num;
+            maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            //maxMarkerCount = int.Parse(numTest.Text);
+            //maxMarkerCount = marker_num;
 
             // 지도 클릭 이벤트 등록
             RouteMap.MouseUp -= RouteMap_MouseUp; // 두 번씩 클릭 이벤트 발생하는 거 해결
@@ -887,8 +891,9 @@ namespace EUV.Views
             List<int> vertexCounts = distinctPolygons.Select(polygon => polygon.Length).ToList();
 
             // 마커 개수 확인
-            //maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
-            maxMarkerCount = marker_num;
+            maxMarkerCount = int.Parse(droneNum.Text); //******************************* 이나경 05-22 numTest.Text
+            //maxMarkerCount = int.Parse(numTest.Text);
+            //maxMarkerCount = marker_num;
 
             // 다각형의 개수와 각 다각형의 꼭짓점 개수 출력
             Console.WriteLine("다각형 개수: " + polygonCount);
@@ -995,10 +1000,11 @@ namespace EUV.Views
 
                 foreach (var list in markersList)
                 {
+                    Console.WriteLine(list);
                     List<DrawingPoint> localPoints = new List<DrawingPoint>();
 
                     foreach (var point in list)
-                    {   
+                    {
                         //Console.WriteLine(RouteMap.FromLatLngToLocal(point));
                         GPoint localPoint = RouteMap.FromLatLngToLocal(point);
 
